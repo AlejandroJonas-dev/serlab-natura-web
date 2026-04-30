@@ -1,0 +1,253 @@
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+
+export type UserRole = 'CUSTOMER' | 'THERAPIST' | 'ADMIN'
+
+export interface User {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  phone?: string
+  role: UserRole
+  isActive: boolean
+  loyaltyPoints: number
+  createdAt: string
+}
+
+export interface AuthResponse {
+  success: boolean
+  message: string
+  data: {
+    user: User
+    token: string
+  }
+}
+
+export interface MeResponse {
+  success: boolean
+  data: { user: User }
+}
+
+// ─── SERVICES ─────────────────────────────────────────────────────────────────
+
+export interface ServiceCategory {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  order: number
+  isActive: boolean
+}
+
+export interface Service {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  shortDescription?: string
+  price: number
+  duration: number
+  images: string[]
+  isActive: boolean
+  isFeatured: boolean
+  category?: ServiceCategory
+  categoryId: string
+  createdAt: string
+}
+
+// ─── PRODUCTS ─────────────────────────────────────────────────────────────────
+
+export interface ProductCategory {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  order: number
+  isActive: boolean
+}
+
+export interface Product {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  shortDescription?: string
+  price: number
+  stock: number
+  images: string[]
+  brand?: string
+  isActive: boolean
+  isFeatured: boolean
+  category?: ProductCategory
+  categoryId: string
+  createdAt: string
+}
+
+// ─── BOOKINGS ─────────────────────────────────────────────────────────────────
+
+export type BookingStatus =
+  | 'PENDING'
+  | 'CONFIRMED'
+  | 'CANCELLED'
+  | 'COMPLETED'
+  | 'NO_SHOW'
+
+export interface Booking {
+  id: string
+  bookingNumber: string
+  date: string
+  startTime: string
+  endTime?: string
+  status: BookingStatus
+  price: number
+  notes?: string
+  service: Pick<Service, 'id' | 'name' | 'slug' | 'duration' | 'price'>
+  therapist?: Pick<User, 'id' | 'firstName' | 'lastName'>
+  createdAt: string
+}
+
+// ─── ORDERS ───────────────────────────────────────────────────────────────────
+
+export type OrderStatus =
+  | 'PENDING'
+  | 'PAID'
+  | 'PROCESSING'
+  | 'SHIPPED'
+  | 'DELIVERED'
+  | 'CANCELLED'
+  | 'REFUNDED'
+
+export type PaymentMethod = 'CASH' | 'CARD' | 'TRANSFER' | 'BIZUM'
+
+export interface OrderItem {
+  id: string
+  quantity: number
+  unitPrice: number
+  totalPrice: number
+  product: Pick<Product, 'id' | 'name' | 'slug' | 'images'>
+}
+
+export interface Order {
+  id: string
+  orderNumber: string
+  subtotal: number
+  shippingCost: number
+  total: number
+  status: OrderStatus
+  paymentMethod: PaymentMethod
+  trackingNumber?: string
+  shippingAddress: Record<string, unknown>
+  notes?: string
+  items: OrderItem[]
+  createdAt: string
+}
+
+// ─── CLASSES ──────────────────────────────────────────────────────────────────
+
+export interface ClassSchedule {
+  id: string
+  dayOfWeek: number
+  startTime: string
+  endTime: string
+  capacity: number
+  enrolledCount: number
+}
+
+export interface GroupClass {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  shortDescription?: string
+  price: number
+  images: string[]
+  isActive: boolean
+  isFeatured: boolean
+  schedules: ClassSchedule[]
+  createdAt: string
+}
+
+// ─── REVIEWS ──────────────────────────────────────────────────────────────────
+
+export type ReviewStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
+export interface Review {
+  id: string
+  rating: number
+  comment?: string
+  status: ReviewStatus
+  productId?: string
+  serviceId?: string
+  user: Pick<User, 'id' | 'firstName' | 'lastName'>
+  createdAt: string
+}
+
+export interface ReviewStats {
+  averageRating: number
+  totalReviews: number
+  distribution: Record<string, number>
+}
+
+// ─── LOYALTY ──────────────────────────────────────────────────────────────────
+
+export type LoyaltyType = 'EARNED' | 'REDEEMED' | 'EXPIRED' | 'BONUS' | 'ADJUSTED'
+
+export interface LoyaltyTransaction {
+  id: string
+  points: number
+  type: LoyaltyType
+  description: string
+  createdAt: string
+}
+
+// ─── ADDRESS ──────────────────────────────────────────────────────────────────
+
+export interface Address {
+  id: string
+  alias: string
+  fullName: string
+  street: string
+  city: string
+  province: string
+  postalCode: string
+  country: string
+  phone?: string
+  isDefault: boolean
+}
+
+// ─── ADMIN STATS ──────────────────────────────────────────────────────────────
+
+export interface DashboardStats {
+  users: { total: number; active: number; newThisMonth: number }
+  orders: { total: number; pending: number; revenue: number; revenueThisMonth: number }
+  bookings: { total: number; pending: number; confirmed: number }
+  products: { total: number; active: number; lowStock: number }
+  services: { total: number; active: number }
+  classes: { total: number; active: number }
+  reviews: { pending: number; approved: number }
+  newsletter: { total: number }
+}
+
+// ─── API GENERIC ──────────────────────────────────────────────────────────────
+
+export interface ApiResponse<T = unknown> {
+  success: boolean
+  message?: string
+  data?: T
+  errors?: Array<{ msg: string; path: string }>
+}
+
+export interface PaginatedResponse<T> {
+  success: boolean
+  data: {
+    [key: string]: T[] | Pagination
+    pagination: Pagination
+  }
+}
+
+export interface Pagination {
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
