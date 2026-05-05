@@ -95,9 +95,11 @@ export type BookingStatus =
 export interface Booking {
   id: string
   bookingNumber: string
+  /** ISO-8601 (Prisma DateTime) */
   date: string
-  startTime: string
-  endTime?: string
+  /** HH:MM (24h) — campo nativo del backend */
+  time: string
+  duration: number
   status: BookingStatus
   price: number
   notes?: string
@@ -117,7 +119,12 @@ export type OrderStatus =
   | 'CANCELLED'
   | 'REFUNDED'
 
-export type PaymentMethod = 'CASH' | 'CARD' | 'TRANSFER' | 'BIZUM'
+export type PaymentMethod =
+  | 'CARD'
+  | 'APPLE_PAY'
+  | 'GOOGLE_PAY'
+  | 'BIZUM'
+  | 'BANK_TRANSFER'
 
 export interface OrderItem {
   id: string
@@ -146,12 +153,17 @@ export interface Order {
 
 export interface ClassSchedule {
   id: string
+  /** 0 = domingo, 6 = sábado */
   dayOfWeek: number
   startTime: string
   endTime: string
-  capacity: number
-  enrolledCount: number
+  maxStudents: number
+  location?: string
+  isActive: boolean
 }
+
+export type EnrollmentType = 'SINGLE_CLASS' | 'MONTHLY' | 'QUARTERLY'
+export type EnrollmentStatus = 'ACTIVE' | 'EXPIRED' | 'CANCELLED'
 
 export interface GroupClass {
   id: string
@@ -159,33 +171,48 @@ export interface GroupClass {
   slug: string
   description?: string
   shortDescription?: string
-  price: number
+  pricePerSession: number
+  priceMonthly?: number | null
+  benefits: string[]
   images: string[]
   isActive: boolean
-  isFeatured: boolean
   schedules: ClassSchedule[]
+  /** Inscripciones activas (campo añadido por el controller) */
+  activeEnrollments?: number
   createdAt: string
 }
 
-// ─── REVIEWS ──────────────────────────────────────────────────────────────────
+export interface ClassEnrollment {
+  id: string
+  classId: string
+  enrollmentType: EnrollmentType
+  status: EnrollmentStatus
+  startDate: string
+  endDate?: string | null
+  class?: Pick<GroupClass, 'id' | 'name' | 'slug' | 'images'> & {
+    pricePerSession: number
+    priceMonthly?: number | null
+    schedules?: ClassSchedule[]
+  }
+}
 
-export type ReviewStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+// ─── REVIEWS ──────────────────────────────────────────────────────────────────
 
 export interface Review {
   id: string
   rating: number
   comment?: string
-  status: ReviewStatus
-  productId?: string
-  serviceId?: string
+  /** El backend usa un booleano único; "pendiente" = isApproved: false */
+  isApproved: boolean
+  productId?: string | null
+  serviceId?: string | null
   user: Pick<User, 'id' | 'firstName' | 'lastName'>
   createdAt: string
 }
 
 export interface ReviewStats {
-  averageRating: number
+  averageRating: number | null
   totalReviews: number
-  distribution: Record<string, number>
 }
 
 // ─── LOYALTY ──────────────────────────────────────────────────────────────────
@@ -204,15 +231,15 @@ export interface LoyaltyTransaction {
 
 export interface Address {
   id: string
-  alias: string
-  fullName: string
   street: string
   city: string
-  province: string
+  /** Provincia (en el modelo Prisma se llama `state`) */
+  state: string
   postalCode: string
   country: string
-  phone?: string
   isDefault: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 // ─── ADMIN STATS ──────────────────────────────────────────────────────────────

@@ -121,8 +121,10 @@ export const productCategoriesApi = {
 export const bookingsApi = {
   create: (body: {
     serviceId: string
+    /** YYYY-MM-DD */
     date: string
-    startTime: string
+    /** HH:MM (24h) — coincide con el campo `time` del backend */
+    time: string
     notes?: string
   }) => api.post('/bookings', body),
   getMyBookings: (params?: { status?: string; page?: number; limit?: number }) =>
@@ -164,11 +166,15 @@ export const ordersApi = {
 
 // ─── Classes ──────────────────────────────────────────────────────────────────
 
+export type EnrollmentType = 'SINGLE_CLASS' | 'MONTHLY' | 'QUARTERLY'
+
 export const classesApi = {
   getAll: (params?: Record<string, unknown>) => api.get('/classes', { params }),
   getBySlug: (slug: string) => api.get(`/classes/slug/${slug}`),
-  enroll: (classId: string, scheduleId?: string) =>
-    api.post(`/classes/${classId}/enroll`, { scheduleId }),
+  enroll: (
+    classId: string,
+    body?: { enrollmentType?: EnrollmentType; scheduleId?: string }
+  ) => api.post(`/classes/${classId}/enroll`, body ?? {}),
   cancelEnrollment: (classId: string) =>
     api.patch(`/classes/${classId}/enroll/cancel`),
   getMyEnrollments: () => api.get('/classes/my-enrollments'),

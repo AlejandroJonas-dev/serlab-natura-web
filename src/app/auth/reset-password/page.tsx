@@ -18,8 +18,10 @@ const schema = z
     newPassword: z
       .string()
       .min(8, 'Mínimo 8 caracteres')
+      .regex(/[a-z]/, 'Debe contener al menos una minúscula')
       .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-      .regex(/[0-9]/, 'Debe contener al menos un número'),
+      .regex(/[0-9]/, 'Debe contener al menos un número')
+      .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Debe contener al menos un carácter especial'),
     confirmNewPassword: z.string(),
   })
   .refine((d) => d.newPassword === d.confirmNewPassword, {
@@ -97,7 +99,7 @@ export default function ResetPasswordPage() {
                 id="newPassword"
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
-                placeholder="Mín. 8 caracteres, 1 mayúscula, 1 número"
+                placeholder="Mín. 8 — minúscula, mayúscula, número y símbolo"
                 aria-invalid={!!errors.newPassword}
                 {...register('newPassword')}
               />

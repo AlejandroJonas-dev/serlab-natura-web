@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src\\config",
+      "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src",
+      "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\prisma"
+    ],
+    "allow": [
+      "Read(//c/Users/alejo/TFG-SERLAB_NATURA/serlab-natura-api/**)"
+    ]
+  }
+}
