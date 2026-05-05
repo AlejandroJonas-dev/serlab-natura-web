@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosInstance } from 'axios'
 
 // ─── Axios instance ────────────────────────────────────────────────────────────
 
