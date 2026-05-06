@@ -1,26 +1,48 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Playfair_Display, Lato } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const playfair = Playfair_Display({
+  variable: '--font-playfair',
   subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const lato = Lato({
+  variable: '--font-lato',
   subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '700'],
 })
 
 export const metadata: Metadata = {
   title: {
-    default: 'Serlab Natura — Herboristería en Córdoba',
+    default: 'Serlab Natura — Centro de Bienestar Natural en Córdoba',
     template: '%s | Serlab Natura',
   },
   description:
-    'Herboristería Serlab Natura en Córdoba. Productos naturales, servicios de terapia y clases grupales de bienestar.',
-  keywords: ['herboristería', 'productos naturales', 'terapia', 'bienestar', 'Córdoba'],
+    'Centro de bienestar natural en Córdoba, con terapias, estética con INDIBA, reflexología, clases de Tai-Chí, pilates y mindfulness y nuestra tienda online de productos naturales y herbolario. Atención personalizada y resultados reales.',
+  keywords: [
+    'herboristería Córdoba',
+    'terapias naturales Córdoba',
+    'INDIBA Córdoba',
+    'bienestar natural',
+    'pilates Córdoba',
+    'mindfulness Córdoba',
+    'reflexología Córdoba',
+    'herbolario online',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'es_ES',
+    siteName: 'Serlab Natura',
+  },
 }
 
 export default function RootLayout({
@@ -29,10 +51,15 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${playfair.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <WhatsAppButton />
+        </Providers>
       </body>
     </html>
   )

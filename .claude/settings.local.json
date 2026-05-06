@@ -1,12 +1,15 @@
 {
   "permissions": {
+    "allow": [
+      "Read(//c/Users/alejo/TFG-SERLAB_NATURA/serlab-natura-api/**)",
+      "Bash(npx prisma *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\serlab-natura-web\\\\src\" -Directory)",
+      "Bash(Select-Object Name)"
+    ],
     "additionalDirectories": [
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src\\config",
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src",
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\prisma"
-    ],
-    "allow": [
-      "Read(//c/Users/alejo/TFG-SERLAB_NATURA/serlab-natura-api/**)"
     ]
   }
 }
