@@ -270,8 +270,8 @@ export default function ClasesPage() {
                 className="text-lg italic leading-relaxed mb-8"
                 style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.45 0 0)' }}
               >
-                "Nuestras clases no son solo ejercicio físico. Son un momento para respirar, para
-                soltar, para conectar con uno mismo."
+                &ldquo;Nuestras clases no son solo ejercicio físico. Son un momento para respirar, para
+                soltar, para conectar con uno mismo.&rdquo;
               </blockquote>
               <Link
                 href="/contacto"

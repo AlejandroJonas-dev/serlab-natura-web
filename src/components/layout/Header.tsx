@@ -42,12 +42,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    setMobileOpen(false)
-    setServicesOpen(false)
-    setUserMenuOpen(false)
-  }, [pathname])
-
   /* Close dropdowns on outside click */
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -71,6 +65,11 @@ export function Header() {
   const cartCount = totalItems()
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
+  const closeMenus = () => {
+    setMobileOpen(false)
+    setServicesOpen(false)
+    setUserMenuOpen(false)
+  }
 
   return (
     <>
@@ -86,13 +85,13 @@ export function Header() {
           <div className="flex items-center justify-between h-16 lg:h-20">
 
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0" aria-label="Serlab Natura — inicio">
+            <Link href="/" className="flex-shrink-0" aria-label="Serlab Natura — inicio" onClick={closeMenus}>
               <Image
-                src="/logo.png"
+                src="/logo-serlab-natura.webp"
                 alt="Serlab Natura"
-                width={120}
-                height={65}
-                className="h-12 lg:h-14 w-auto"
+                width={1674}
+                height={515}
+                className="h-10 lg:h-12 w-auto"
                 priority
               />
             </Link>
@@ -122,6 +121,7 @@ export function Header() {
                           <Link
                             key={child.href}
                             href={child.href}
+                            onClick={closeMenus}
                             className="block px-5 py-3 text-sm text-[oklch(0.21_0_0)] hover:bg-[oklch(0.962_0.005_90)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150 border-b border-[oklch(0.656_0.016_78/0.1)] last:border-0"
                           >
                             {child.label}
@@ -134,6 +134,7 @@ export function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    onClick={closeMenus}
                     className={[
                       'px-3 py-2 text-sm tracking-wide link-underline transition-colors duration-200',
                       isActive(link.href)
@@ -152,6 +153,7 @@ export function Header() {
               {/* Cart */}
               <Link
                 href="/carrito"
+                onClick={closeMenus}
                 className="relative flex items-center justify-center w-10 h-10 text-[oklch(0.21_0_0)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-200"
                 aria-label={`Carrito${cartCount > 0 ? `, ${cartCount} artículos` : ''}`}
               >
@@ -179,11 +181,11 @@ export function Header() {
                         <p className="text-xs text-[oklch(0.656_0.016_78)]">Conectado como</p>
                         <p className="text-sm font-medium text-[oklch(0.21_0_0)] truncate">{user.firstName} {user.lastName}</p>
                       </div>
-                      <Link href="/cuenta" className="flex items-center gap-2 px-5 py-3 text-sm text-[oklch(0.21_0_0)] hover:bg-[oklch(0.962_0.005_90)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150">
+                      <Link href="/cuenta" onClick={closeMenus} className="flex items-center gap-2 px-5 py-3 text-sm text-[oklch(0.21_0_0)] hover:bg-[oklch(0.962_0.005_90)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150">
                         <Settings className="w-4 h-4" /> Mi cuenta
                       </Link>
                       {user.role === 'ADMIN' && (
-                        <Link href="/admin" className="flex items-center gap-2 px-5 py-3 text-sm text-[oklch(0.21_0_0)] hover:bg-[oklch(0.962_0.005_90)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150">
+                        <Link href="/admin" onClick={closeMenus} className="flex items-center gap-2 px-5 py-3 text-sm text-[oklch(0.21_0_0)] hover:bg-[oklch(0.962_0.005_90)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150">
                           <Settings className="w-4 h-4" /> Panel admin
                         </Link>
                       )}
@@ -199,6 +201,7 @@ export function Header() {
               ) : (
                 <Link
                   href="/auth/login"
+                  onClick={closeMenus}
                   className="hidden lg:flex items-center gap-1.5 ml-1 px-4 py-2 text-xs tracking-[0.1em] uppercase font-medium border border-[oklch(0.21_0_0)] text-[oklch(0.21_0_0)] hover:bg-[oklch(0.21_0_0)] hover:text-[oklch(0.979_0.004_90)] transition-all duration-300"
                 >
                   Acceder
@@ -223,7 +226,7 @@ export function Header() {
         <div className="fixed inset-0 z-40 lg:hidden">
           <div
             className="absolute inset-0 bg-[oklch(0.21_0_0/0.4)]"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMenus}
           />
           <nav
             className="absolute top-16 left-0 right-0 bg-[oklch(0.979_0.004_90)] border-b border-[oklch(0.656_0.016_78/0.2)] px-6 pt-4 pb-8 animate-slide-down"
@@ -233,6 +236,7 @@ export function Header() {
               <div key={link.href}>
                 <Link
                   href={link.href}
+                  onClick={closeMenus}
                   className={[
                     'block py-3.5 text-base border-b border-[oklch(0.656_0.016_78/0.1)] last:border-0 transition-colors duration-150',
                     isActive(link.href)
@@ -246,6 +250,7 @@ export function Header() {
                   <Link
                     key={child.href}
                     href={child.href}
+                    onClick={closeMenus}
                     className="block pl-4 py-2.5 text-sm text-[oklch(0.656_0.016_78)] border-b border-[oklch(0.656_0.016_78/0.08)] hover:text-[oklch(0.668_0.063_64)] transition-colors duration-150"
                   >
                     — {child.label}
@@ -265,12 +270,14 @@ export function Header() {
                 <>
                   <Link
                     href="/auth/login"
+                    onClick={closeMenus}
                     className="block py-3 text-center text-sm border border-[oklch(0.21_0_0)] text-[oklch(0.21_0_0)]"
                   >
                     Acceder
                   </Link>
                   <Link
                     href="/auth/register"
+                    onClick={closeMenus}
                     className="block py-3 text-center text-sm bg-[oklch(0.21_0_0)] text-[oklch(0.979_0.004_90)]"
                   >
                     Crear cuenta

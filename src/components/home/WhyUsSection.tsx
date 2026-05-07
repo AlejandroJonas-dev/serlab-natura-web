@@ -118,8 +118,8 @@ export function WhyUsSection() {
             className="text-xl lg:text-2xl italic leading-relaxed"
             style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.45 0 0)' }}
           >
-            "En cada sesión, en cada clase, en cada recomendación, trabajamos desde la escucha activa,
-            el rigor profesional y una visión integrativa del cuidado personal."
+            &ldquo;En cada sesión, en cada clase, en cada recomendación, trabajamos desde la escucha activa,
+            el rigor profesional y una visión integrativa del cuidado personal.&rdquo;
           </blockquote>
           <div className="flex items-center justify-center gap-3 mt-6">
             <span className="h-px w-8" style={{ background: 'oklch(0.668 0.063 64)' }} />

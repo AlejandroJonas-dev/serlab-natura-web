@@ -104,11 +104,11 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <Image
-                src="/logo.png"
+                src="/logo-serlab-natura.webp"
                 alt="Serlab Natura"
-                width={130}
-                height={70}
-                className="h-16 w-auto"
+                width={1674}
+                height={515}
+                className="h-14 w-auto"
               />
             </Link>
             <p className="text-sm leading-relaxed text-[oklch(0.45_0_0)] mb-6 max-w-xs">

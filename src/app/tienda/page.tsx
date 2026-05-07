@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Package, ShoppingBag, Search } from 'lucide-react'
+import { ArrowRight, Package, ShoppingBag, Search, Leaf, Truck, ShieldCheck, RotateCcw } from 'lucide-react'
 import { productsApi, productCategoriesApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
 import type { Product, ProductCategory } from '@/types'
@@ -309,22 +309,27 @@ export default function TiendaPage() {
 
       {/* Trust bar */}
       <section
-        className="py-12 border-t border-[oklch(0.656_0.016_78/0.12)]"
+        className="border-t border-[oklch(0.656_0.016_78/0.12)]"
         style={{ background: 'oklch(0.962 0.005 90)' }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[oklch(0.656_0.016_78/0.1)]">
             {[
-              { icon: '🌿', label: 'Productos 100% naturales' },
-              { icon: '🚚', label: 'Envío a toda España' },
-              { icon: '🔒', label: 'Pago seguro' },
-              { icon: '↩', label: 'Devolución 30 días' },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-2">
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-xs" style={{ color: 'oklch(0.45 0 0)' }}>
-                  {item.label}
-                </span>
+              { Icon: Leaf, title: '100% natural', sub: 'Selección profesional' },
+              { Icon: Truck, title: 'Envío a España', sub: 'Gratis desde 50€' },
+              { Icon: ShieldCheck, title: 'Pago seguro', sub: 'Cifrado SSL' },
+              { Icon: RotateCcw, title: 'Devoluciones', sub: '30 días garantizados' },
+            ].map(({ Icon, title, sub }) => (
+              <div key={title} className="flex items-center gap-3 px-6 py-6 first:pl-0 last:pr-0">
+                <Icon className="w-5 h-5 flex-shrink-0" style={{ color: 'oklch(0.551 0.041 147)' }} />
+                <div>
+                  <p className="text-xs font-medium tracking-wide" style={{ color: 'oklch(0.21 0 0)' }}>
+                    {title}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: 'oklch(0.656 0.016 78)' }}>
+                    {sub}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

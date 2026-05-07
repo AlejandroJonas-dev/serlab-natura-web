@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
+import { RevealObserver } from '@/components/layout/RevealObserver'
 
 const playfair = Playfair_Display({
   variable: '--font-playfair',
@@ -51,6 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       className={`${playfair.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
@@ -59,6 +61,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <WhatsAppButton />
+          <RevealObserver />
         </Providers>
       </body>
     </html>
