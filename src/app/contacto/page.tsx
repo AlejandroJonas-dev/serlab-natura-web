@@ -305,11 +305,18 @@ export default function ContactoPage() {
                         Teléfono
                       </p>
                       <a
-                        href="tel:+34957000000"
-                        className="text-xs hover:text-[oklch(0.668_0.063_64)] transition-colors"
+                        href="tel:+34957923347"
+                        className="block text-xs hover:text-[oklch(0.668_0.063_64)] transition-colors"
                         style={{ color: 'oklch(0.45 0 0)' }}
                       >
-                        957 00 00 00
+                        957 92 33 47 · fijo
+                      </a>
+                      <a
+                        href="tel:+34604230456"
+                        className="block text-xs mt-0.5 hover:text-[oklch(0.668_0.063_64)] transition-colors"
+                        style={{ color: 'oklch(0.45 0 0)' }}
+                      >
+                        604 23 04 56 · móvil/WhatsApp
                       </a>
                     </div>
                   </div>
@@ -366,7 +373,7 @@ export default function ContactoPage() {
 
               {/* WhatsApp CTA */}
               <a
-                href="https://wa.me/34600000000"
+                href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Serlab%20Natura."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-between w-full p-5 transition-colors duration-200 group"

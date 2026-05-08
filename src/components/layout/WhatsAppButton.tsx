@@ -3,7 +3,7 @@
 export function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/34600000000"
+      href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Serlab%20Natura."
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contactar por WhatsApp"

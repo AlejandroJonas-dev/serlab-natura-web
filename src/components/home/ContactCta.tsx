@@ -43,7 +43,7 @@ export function ContactCta() {
                 Reservar consulta <ArrowRight className="w-4 h-4" />
               </Link>
               <a
-                href="https://wa.me/34600000000"
+                href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Serlab%20Natura."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-medium tracking-wide border transition-all duration-300 hover:bg-[oklch(0.21_0_0)] hover:text-[oklch(0.979_0.004_90)]"
@@ -62,8 +62,12 @@ export function ContactCta() {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 flex-shrink-0" style={{ color: 'oklch(0.668 0.063 64)' }} />
-                  <a href="tel:+34957000000" className="text-sm text-[oklch(0.45_0_0)] hover:text-[oklch(0.668_0.063_64)] transition-colors">
-                    957 00 00 00
+                  <a href="tel:+34957923347" className="text-sm text-[oklch(0.45_0_0)] hover:text-[oklch(0.668_0.063_64)] transition-colors">
+                    957 92 33 47
+                  </a>
+                  <span className="text-xs text-[oklch(0.656_0.016_78)]">·</span>
+                  <a href="tel:+34604230456" className="text-sm text-[oklch(0.45_0_0)] hover:text-[oklch(0.668_0.063_64)] transition-colors">
+                    604 23 04 56
                   </a>
                 </div>
                 <div className="flex items-center gap-3">

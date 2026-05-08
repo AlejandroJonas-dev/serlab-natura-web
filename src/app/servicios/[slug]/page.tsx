@@ -244,7 +244,7 @@ export default function ServiceDetailPage() {
                 Reservar sesión <ArrowRight className="w-4 h-4" />
               </Link>
               <a
-                href="https://wa.me/34600000000"
+                href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20una%20sesi%C3%B3n%20de%20Serlab%20Natura."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 py-4 text-sm font-medium tracking-wide border transition-colors duration-300 hover:bg-[oklch(0.21_0_0)] hover:text-[oklch(0.979_0.004_90)]"

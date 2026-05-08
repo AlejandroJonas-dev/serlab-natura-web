@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,8 +22,10 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect')
   const setAuth = useAuthStore((s) => s.setAuth)
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -40,7 +42,8 @@ export default function LoginPage() {
       const { data } = await authApi.login(values)
       const { user, token } = (data as AuthResponse).data
       setAuth(user, token)
-      router.push(user.role === 'ADMIN' ? '/admin' : '/')
+      const fallback = user.role === 'ADMIN' ? '/admin' : '/'
+      router.push(redirectTo || fallback)
     } catch (err) {
       setServerError(err instanceof Error ? err.message : 'Error al iniciar sesión')
     }
@@ -124,5 +127,13 @@ export default function LoginPage() {
         </CardFooter>
       </form>
     </Card>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   )
 }
