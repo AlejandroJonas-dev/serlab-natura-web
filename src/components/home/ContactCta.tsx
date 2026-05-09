@@ -56,9 +56,12 @@ export function ContactCta() {
             {/* Contact info */}
             <div className="reveal space-y-4">
               <address className="not-italic space-y-3">
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: 'oklch(0.668 0.063 64)' }} />
-                  <span className="text-sm text-[oklch(0.45_0_0)]">Córdoba, España</span>
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'oklch(0.668 0.063 64)' }} />
+                  <span className="text-sm text-[oklch(0.45_0_0)] leading-relaxed">
+                    Av. Llanos del Pretorio, 1, Local<br />
+                    14006 Córdoba
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 flex-shrink-0" style={{ color: 'oklch(0.668 0.063 64)' }} />
@@ -80,24 +83,38 @@ export function ContactCta() {
             </div>
           </div>
 
-          {/* Right — decorative map placeholder + schedule */}
+          {/* Right — embedded map + schedule */}
           <div className="reveal-left">
-            {/* Map placeholder */}
-            <div
-              className="relative aspect-[4/3] mb-8 flex items-center justify-center"
+            {/* Map */}
+            <a
+              href="https://www.google.com/maps/place/Av.+Llanos+del+Pretorio,+1,+14006+C%C3%B3rdoba"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Ver Serlab Natura en Google Maps"
+              className="block relative aspect-[4/3] mb-8 overflow-hidden group"
               style={{
                 background: 'oklch(0.962 0.005 90)',
                 border: '1px solid oklch(0.656 0.016 78 / 0.2)',
               }}
             >
-              <div className="text-center">
-                <MapPin className="w-10 h-10 mx-auto mb-3" style={{ color: 'oklch(0.551 0.041 147)' }} />
-                <p className="text-sm font-medium" style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.21 0 0)' }}>
-                  Serlab Natura
-                </p>
-                <p className="text-xs text-[oklch(0.656_0.016_78)] mt-1">Córdoba, España</p>
-              </div>
-            </div>
+              <iframe
+                title="Mapa de Serlab Natura"
+                src="https://www.google.com/maps?q=Av.+Llanos+del+Pretorio,+1,+14006+C%C3%B3rdoba&output=embed"
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                aria-hidden
+              />
+              <span
+                className="absolute bottom-3 right-3 text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 backdrop-blur-sm transition-colors duration-200 group-hover:bg-[oklch(0.21_0_0)] group-hover:text-[oklch(0.979_0.004_90)]"
+                style={{
+                  background: 'oklch(0.979 0.004 90 / 0.92)',
+                  color: 'oklch(0.21 0 0)',
+                }}
+              >
+                Cómo llegar →
+              </span>
+            </a>
 
             {/* Schedule card */}
             <div

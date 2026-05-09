@@ -115,7 +115,15 @@ export function Footer() {
               Centro de bienestar natural en Córdoba. Terapias, estética avanzada, clases y herbolario online.
             </p>
             <address className="not-italic text-xs text-[oklch(0.656_0.016_78)] leading-relaxed mb-6">
-              Córdoba, España<br />
+              <a
+                href="https://www.google.com/maps/place/Av.+Llanos+del+Pretorio,+1,+14006+C%C3%B3rdoba"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[oklch(0.668_0.063_64)] transition-colors"
+              >
+                Av. Llanos del Pretorio, 1, Local<br />
+                14006 Córdoba
+              </a><br />
               <a href="tel:+34957923347" className="hover:text-[oklch(0.668_0.063_64)] transition-colors">957 92 33 47</a> · <a href="tel:+34604230456" className="hover:text-[oklch(0.668_0.063_64)] transition-colors">604 23 04 56</a><br />
               <a href="mailto:info@serlabnatura.com" className="hover:text-[oklch(0.668_0.063_64)] transition-colors">info@serlabnatura.com</a>
             </address>

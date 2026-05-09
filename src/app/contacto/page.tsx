@@ -293,9 +293,17 @@ export default function ContactoPage() {
                       <p className="text-sm font-medium mb-0.5" style={{ color: 'oklch(0.21 0 0)' }}>
                         Dirección
                       </p>
-                      <p className="text-xs leading-relaxed" style={{ color: 'oklch(0.45 0 0)' }}>
-                        Córdoba, España
-                      </p>
+                      <a
+                        href="https://www.google.com/maps/place/Av.+Llanos+del+Pretorio,+1,+14006+C%C3%B3rdoba"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-xs leading-relaxed hover:text-[oklch(0.668_0.063_64)] transition-colors"
+                        style={{ color: 'oklch(0.45 0 0)' }}
+                      >
+                        Av. Llanos del Pretorio, 1, Local
+                        <br />
+                        14006 Córdoba
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
