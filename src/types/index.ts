@@ -61,9 +61,20 @@ export interface ProductCategory {
   id: string
   name: string
   slug: string
-  description?: string
+  description?: string | null
+  image?: string | null
   order: number
   isActive: boolean
+  parentId?: string | null
+  /** Solo presente si la API devuelve el árbol (?tree=true) */
+  children?: ProductCategoryNode[]
+  /** Solo presente con ?includeCount=true */
+  productCount?: number
+}
+
+/** Nodo de categoría con sus hijos resueltos (estructura recursiva). */
+export interface ProductCategoryNode extends ProductCategory {
+  children: ProductCategoryNode[]
 }
 
 export interface Product {

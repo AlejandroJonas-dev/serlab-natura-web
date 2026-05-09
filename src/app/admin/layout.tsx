@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   Calendar,
   ExternalLink,
+  FolderTree,
   GraduationCap,
   LayoutDashboard,
   LogOut,
@@ -30,6 +31,7 @@ const NAV: Array<{
   { href: '/admin/pedidos', label: 'Pedidos', Icon: ShoppingBag },
   { href: '/admin/reservas', label: 'Reservas', Icon: Calendar },
   { href: '/admin/productos', label: 'Productos', Icon: Package },
+  { href: '/admin/categorias', label: 'Categorías', Icon: FolderTree },
   { href: '/admin/servicios', label: 'Servicios', Icon: Sparkles },
   { href: '/admin/clases', label: 'Clases', Icon: GraduationCap },
   { href: '/admin/usuarios', label: 'Usuarios', Icon: UsersIcon },

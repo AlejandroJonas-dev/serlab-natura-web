@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { AlertTriangle, Package, Upload, X } from 'lucide-react'
 import type { Product, ProductCategory } from '@/types'
@@ -135,20 +135,11 @@ export function ProductForm({
             />
           </Field>
           <Field label="Categoría *">
-            <select
-              required
+            <CategorySelect
+              categories={categories}
               value={values.categoryId}
-              onChange={handleField('categoryId')}
-              className={inputCls}
-              style={inputStyle}
-            >
-              <option value="">Selecciona una categoría...</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              onChange={(id) => setValues((prev) => ({ ...prev, categoryId: id }))}
+            />
           </Field>
           <Field label="Marca">
             <input
@@ -519,5 +510,68 @@ function FilePreview({ file }: { file: File }) {
       className="absolute inset-0 w-full h-full object-contain p-2"
       onLoad={() => URL.revokeObjectURL(url)}
     />
+  )
+}
+
+/**
+ * Selector que muestra cada categoría con su ruta jerárquica completa
+ * (Alimentación / Bebidas / Té e infusiones), indentado por nivel.
+ * Se construye a partir de la lista plana usando parentId.
+ */
+function CategorySelect({
+  categories,
+  value,
+  onChange,
+}: {
+  categories: ProductCategory[]
+  value: string
+  onChange: (id: string) => void
+}) {
+  const ordered = useMemo(() => {
+    const byParent = new Map<string | null, ProductCategory[]>()
+    categories.forEach((c) => {
+      const key = c.parentId ?? null
+      if (!byParent.has(key)) byParent.set(key, [])
+      byParent.get(key)!.push(c)
+    })
+    byParent.forEach((arr) =>
+      arr.sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
+    )
+
+    const out: Array<{ cat: ProductCategory; path: string; depth: number }> = []
+    const walk = (parentId: string | null, parents: string[], depth: number) => {
+      const list = byParent.get(parentId) ?? []
+      list.forEach((c) => {
+        const path = [...parents, c.name].join(' / ')
+        out.push({ cat: c, path, depth })
+        walk(c.id, [...parents, c.name], depth + 1)
+      })
+    }
+    walk(null, [], 0)
+    return out
+  }, [categories])
+
+  return (
+    <select
+      required
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={inputCls}
+      style={inputStyle}
+    >
+      <option value="">Selecciona una categoría...</option>
+      {ordered.map(({ cat, path, depth }) => (
+        <option key={cat.id} value={cat.id}>
+          {'  '.repeat(depth)}
+          {depth > 0 ? '└ ' : ''}
+          {cat.isActive ? cat.name : `${cat.name} (inactiva)`}
+          {depth > 0 && (
+            <>
+              {'   '}— {path}
+            </>
+          )}
+        </option>
+      ))}
+    </select>
   )
 }

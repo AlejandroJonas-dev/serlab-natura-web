@@ -106,11 +106,30 @@ export const productsApi = {
 }
 
 export const productCategoriesApi = {
-  getAll: () => api.get('/product-categories'),
-  create: (body: { name: string; description?: string }) =>
+  /**
+   * Listado de categorías.
+   * - `tree: true` devuelve árbol jerárquico (cada categoría con `children`).
+   * - `includeCount: true` añade `productCount` por categoría.
+   * - `includeInactive: true` (admin) muestra también las inactivas.
+   */
+  getAll: (params?: {
+    tree?: boolean
+    includeCount?: boolean
+    includeInactive?: boolean
+  }) => api.get('/product-categories', { params }),
+  getBySlug: (slug: string) => api.get(`/product-categories/slug/${slug}`),
+  getById: (id: string) => api.get(`/product-categories/${id}`),
+  create: (body: { name: string; description?: string; parentId?: string | null }) =>
     api.post('/product-categories', body),
-  update: (id: string, body: { name?: string; description?: string }) =>
-    api.put(`/product-categories/${id}`, body),
+  update: (
+    id: string,
+    body: {
+      name?: string
+      description?: string | null
+      parentId?: string | null
+      isActive?: boolean
+    }
+  ) => api.put(`/product-categories/${id}`, body),
   delete: (id: string) => api.delete(`/product-categories/${id}`),
   reorder: (items: Array<{ id: string; order: number }>) =>
     api.patch('/product-categories/reorder', { items }),
