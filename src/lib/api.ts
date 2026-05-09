@@ -184,6 +184,31 @@ export const classesApi = {
   update: (id: string, data: FormData) =>
     api.put(`/classes/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } }),
   delete: (id: string) => api.delete(`/classes/${id}`),
+  // Admin — schedules
+  addSchedule: (
+    classId: string,
+    body: {
+      dayOfWeek: number
+      startTime: string
+      endTime: string
+      maxStudents?: number
+      location?: string
+    }
+  ) => api.post(`/classes/${classId}/schedules`, body),
+  updateSchedule: (
+    classId: string,
+    scheduleId: string,
+    body: Partial<{
+      dayOfWeek: number
+      startTime: string
+      endTime: string
+      maxStudents: number
+      location: string
+      isActive: boolean
+    }>
+  ) => api.put(`/classes/${classId}/schedules/${scheduleId}`, body),
+  deleteSchedule: (classId: string, scheduleId: string) =>
+    api.delete(`/classes/${classId}/schedules/${scheduleId}`),
 }
 
 // ─── Reviews ──────────────────────────────────────────────────────────────────
