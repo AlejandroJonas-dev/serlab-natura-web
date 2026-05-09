@@ -4,7 +4,14 @@
       "Read(//c/Users/alejo/TFG-SERLAB_NATURA/serlab-natura-api/**)",
       "Bash(npx prisma *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\serlab-natura-web\\\\src\" -Directory)",
-      "Bash(Select-Object Name)"
+      "Bash(Select-Object Name)",
+      "Bash(npm run *)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"TSC=$?\")",
+      "Bash(tail -50 /tmp/build.log)",
+      "Read(//tmp/**)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src\\config",
