@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useSyncExternalStore } from 'react'
 import { ShoppingBag, User, Menu, X, ChevronDown, LogOut, Settings } from 'lucide-react'
 import { useCartStore } from '@/stores/cart.store'
 import { useAuthStore } from '@/stores/auth.store'
@@ -36,6 +36,18 @@ export function Header() {
   const totalItems = useCartStore((s) => s.totalItems)
   const { user, isAuthenticated, logout } = useAuthStore()
 
+  // Los stores con `persist` rehidratan en cliente. En SSR no existe
+  // localStorage, así que durante el primer render quedan vacíos y
+  // el HTML del servidor no coincidiría con el del cliente cuando
+  // ya tienes carrito o sesión guardada. Esto causa el "Hydration
+  // failed". Gateamos las partes dependientes de los stores hasta
+  // que el componente esté montado en cliente.
+  const isHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -62,7 +74,12 @@ export function Header() {
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
 
-  const cartCount = totalItems()
+  // En SSR estos valores se "congelan" a su estado inicial (sin carrito,
+  // sin sesión) para que el HTML coincida con el del cliente antes de
+  // hidratar. En cuanto isHydrated pasa a true, se actualizan a los
+  // valores reales del store persistido.
+  const cartCount = isHydrated ? totalItems() : 0
+  const showUserMenu = isHydrated && isAuthenticated && !!user
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
   const closeMenus = () => {
@@ -166,7 +183,7 @@ export function Header() {
               </Link>
 
               {/* User account */}
-              {isAuthenticated && user ? (
+              {showUserMenu ? (
                 <div ref={userMenuRef} className="relative">
                   <button
                     onClick={() => setUserMenuOpen((v) => !v)}
@@ -259,7 +276,7 @@ export function Header() {
               </div>
             ))}
             <div className="pt-6 flex flex-col gap-3">
-              {isAuthenticated ? (
+              {showUserMenu ? (
                 <button
                   onClick={logout}
                   className="w-full py-3 text-center text-sm border border-[oklch(0.21_0_0/0.3)] text-[oklch(0.21_0_0)]"
