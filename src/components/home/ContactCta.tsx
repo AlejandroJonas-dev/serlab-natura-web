@@ -46,8 +46,7 @@ export function ContactCta() {
                 href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Serlab%20Natura."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-medium tracking-wide border transition-all duration-300 hover:bg-[oklch(0.21_0_0)] hover:text-[oklch(0.979_0.004_90)]"
-                style={{ borderColor: 'oklch(0.21 0 0)', color: 'oklch(0.21 0 0)' }}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-medium tracking-wide border transition-all duration-300 text-[oklch(0.21_0_0)] border-[oklch(0.21_0_0)] hover:bg-[oklch(0.21_0_0)] hover:text-[oklch(0.979_0.004_90)]"
               >
                 WhatsApp directo
               </a>
