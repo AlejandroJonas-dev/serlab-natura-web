@@ -312,17 +312,9 @@ export default function ProductDetailPage() {
               {product.name}
             </h1>
 
-            {product.brand && (
-              <p
-                className="text-sm italic mb-8"
-                style={{
-                  fontFamily: 'var(--font-playfair), serif',
-                  color: 'oklch(0.656 0.016 78)',
-                }}
-              >
-                Ref. {product.brand}
-              </p>
-            )}
+            {/* La referencia interna (product.brand) es código de proveedor —
+                no se expone al cliente, solo se ve desde el panel admin. */}
+            <div className="mb-8" />
 
             {product.shortDescription && (
               <p
@@ -458,7 +450,7 @@ export default function ProductDetailPage() {
             >
               {[
                 { num: '01', title: 'Envío 24-72h', sub: 'Toda España' },
-                { num: '02', title: 'Pago seguro', sub: 'SSL · PCI-DSS' },
+                { num: '02', title: 'Pago seguro', sub: 'Tarjeta, Bizum o transferencia' },
                 { num: '03', title: '30 días', sub: 'Devolución libre' },
               ].map(({ num, title, sub }) => (
                 <div key={num}>

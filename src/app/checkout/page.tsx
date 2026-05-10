@@ -470,8 +470,7 @@ export default function CheckoutPage() {
                   style={{ color: 'oklch(0.656 0.016 78)' }}
                 >
                   <Lock className="w-3.5 h-3.5" />
-                  Pago simulado para este TFG. En producción se integraría una pasarela
-                  PCI-DSS (Stripe, Redsys, etc.).
+                  Confirmación inmediata por email tras la compra.
                 </p>
               </section>
 
@@ -607,7 +606,7 @@ export default function CheckoutPage() {
                 className="flex items-center justify-center gap-1.5 text-xs mt-4"
                 style={{ color: 'oklch(0.656 0.016 78)' }}
               >
-                <Lock className="w-3 h-3" /> Pago seguro · SSL cifrado
+                <Lock className="w-3 h-3" /> Compra segura
               </p>
             </aside>
           </div>

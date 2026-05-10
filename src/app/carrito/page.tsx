@@ -233,7 +233,7 @@ export default function CarritoPage() {
             </Link>
 
             <p className="text-xs text-center mt-4" style={{ color: 'oklch(0.656 0.016 78)' }}>
-              Pago seguro · SSL cifrado
+              Envíos a toda España · 30 días de devolución
             </p>
           </div>
         </div>

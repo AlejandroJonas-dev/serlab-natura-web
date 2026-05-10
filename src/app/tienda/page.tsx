@@ -574,7 +574,7 @@ export default function TiendaPage() {
               {
                 num: '03',
                 title: 'Pago seguro',
-                sub: 'Cifrado SSL y pasarela PCI-DSS certificada.',
+                sub: 'Tarjeta, Bizum o transferencia. Sin sorpresas.',
               },
               {
                 num: '04',
