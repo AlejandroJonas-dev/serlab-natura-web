@@ -14,6 +14,13 @@ const nextConfig: NextConfig = {
         hostname: '*.supabase.co',
         pathname: '/**',
       },
+      {
+        // Las imágenes de productos / servicios / clases viven en Cloudinary
+        // bajo el cloud "dpx2boqn1" — ver serlab-natura-api/src/services/cloudinary.service.ts
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
     ],
   },
 }
