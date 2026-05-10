@@ -6,11 +6,7 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { ArrowRight, CheckCircle2, Eye, EyeOff } from 'lucide-react'
 import { authApi } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth.store'
 import type { AuthResponse } from '@/types'
@@ -26,6 +22,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect')
+  const justReset = searchParams.get('reset') === '1'
   const setAuth = useAuthStore((s) => s.setAuth)
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -45,88 +42,227 @@ function LoginForm() {
       const fallback = user.role === 'ADMIN' ? '/admin' : '/'
       router.push(redirectTo || fallback)
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Error al iniciar sesión')
+      setServerError(
+        err instanceof Error ? err.message : 'Error al iniciar sesión'
+      )
     }
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Iniciar sesión</CardTitle>
-        <CardDescription>Accede a tu cuenta de Serlab Natura</CardDescription>
-      </CardHeader>
+    <div>
+      <header className="mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="rule-cobre" />
+          <span
+            className="text-xs tracking-[0.25em] uppercase"
+            style={{ color: 'oklch(0.668 0.063 64)' }}
+          >
+            Iniciar sesión
+          </span>
+        </div>
+        <h1
+          className="text-3xl lg:text-4xl mb-3"
+          style={{
+            fontFamily: 'var(--font-playfair), serif',
+            color: 'oklch(0.21 0 0)',
+          }}
+        >
+          Bienvenida de nuevo,
+          <em
+            className="block italic"
+            style={{ color: 'oklch(0.551 0.041 147)' }}
+          >
+            te esperábamos.
+          </em>
+        </h1>
+        <p
+          className="text-sm leading-relaxed"
+          style={{ color: 'oklch(0.45 0 0)' }}
+        >
+          Introduce tus datos para acceder a tu cuenta de Serlab Natura.
+        </p>
+      </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CardContent className="flex flex-col gap-4">
-          {serverError && (
-            <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {serverError}
-            </div>
-          )}
+      {justReset && (
+        <div
+          className="flex items-start gap-3 p-3.5 mb-6 text-sm"
+          style={{
+            background: 'oklch(0.551 0.041 147 / 0.08)',
+            border: '1px solid oklch(0.551 0.041 147 / 0.3)',
+            color: 'oklch(0.4 0.041 147)',
+          }}
+        >
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
+          <span>
+            Contraseña actualizada correctamente. Ya puedes iniciar sesión.
+          </span>
+        </div>
+      )}
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="tu@email.com"
-              aria-invalid={!!errors.email}
-              {...register('email')}
-            />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
-          </div>
+      {serverError && (
+        <div
+          className="p-3.5 mb-6 text-sm"
+          style={{
+            background: 'oklch(0.96 0.05 25)',
+            border: '1px solid oklch(0.6 0.18 25 / 0.4)',
+            color: 'oklch(0.4 0.18 25)',
+          }}
+        >
+          {serverError}
+        </div>
+      )}
 
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Contraseña</Label>
-              <Link
-                href="/auth/forgot-password"
-                className="text-xs text-muted-foreground hover:text-primary"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                placeholder="••••••••"
-                aria-invalid={!!errors.password}
-                {...register('password')}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-xs text-destructive">{errors.password.message}</p>
-            )}
-          </div>
-        </CardContent>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+        <Field
+          label="Email"
+          error={errors.email?.message}
+          htmlFor="email"
+        >
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="tu@email.com"
+            {...register('email')}
+            className={inputCls}
+            style={errors.email ? inputErrorStyle : inputStyle}
+          />
+        </Field>
 
-        <CardFooter className="flex flex-col gap-3">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting && <Loader2 className="size-4 animate-spin" />}
-            Entrar
-          </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            ¿No tienes cuenta?{' '}
-            <Link href="/auth/register" className="font-medium text-primary hover:underline">
-              Regístrate
+        <Field
+          label="Contraseña"
+          error={errors.password?.message}
+          htmlFor="password"
+          extra={
+            <Link
+              href="/auth/forgot-password"
+              className="text-[11px] tracking-wide transition-colors hover:text-[oklch(0.668_0.063_64)]"
+              style={{ color: 'oklch(0.45 0 0)' }}
+            >
+              ¿Olvidaste tu contraseña?
             </Link>
-          </p>
-        </CardFooter>
+          }
+        >
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              placeholder="••••••••"
+              {...register('password')}
+              className={`${inputCls} pr-11`}
+              style={errors.password ? inputErrorStyle : inputStyle}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              tabIndex={-1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors hover:text-[oklch(0.21_0_0)]"
+              style={{ color: 'oklch(0.656 0.016 78)' }}
+              aria-label={
+                showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+              }
+            >
+              {showPassword ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+        </Field>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full inline-flex items-center justify-center gap-2 py-3.5 mt-2 text-sm font-medium tracking-wide transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{
+            background: 'oklch(0.21 0 0)',
+            color: 'oklch(0.979 0.004 90)',
+          }}
+        >
+          {isSubmitting ? (
+            'Entrando...'
+          ) : (
+            <>
+              Acceder
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
       </form>
-    </Card>
+
+      <p
+        className="text-sm text-center mt-8"
+        style={{ color: 'oklch(0.45 0 0)' }}
+      >
+        ¿No tienes cuenta?{' '}
+        <Link
+          href={
+            redirectTo
+              ? `/auth/register?redirect=${encodeURIComponent(redirectTo)}`
+              : '/auth/register'
+          }
+          className="transition-colors hover:text-[oklch(0.668_0.063_64)] underline-offset-4 hover:underline"
+          style={{ color: 'oklch(0.21 0 0)' }}
+        >
+          Regístrate
+        </Link>
+      </p>
+    </div>
+  )
+}
+
+const inputCls =
+  'w-full px-4 py-3 text-sm focus:outline-none transition-colors'
+
+const inputStyle = {
+  background: 'oklch(0.962 0.005 90)',
+  border: '1px solid oklch(0.656 0.016 78 / 0.25)',
+  color: 'oklch(0.21 0 0)',
+} as const
+
+const inputErrorStyle = {
+  background: 'oklch(0.962 0.005 90)',
+  border: '1px solid oklch(0.6 0.18 25 / 0.6)',
+  color: 'oklch(0.21 0 0)',
+} as const
+
+function Field({
+  label,
+  error,
+  htmlFor,
+  extra,
+  children,
+}: {
+  label: string
+  error?: string
+  htmlFor: string
+  extra?: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label
+          htmlFor={htmlFor}
+          className="block text-xs tracking-wide uppercase"
+          style={{ color: 'oklch(0.45 0 0)' }}
+        >
+          {label}
+        </label>
+        {extra}
+      </div>
+      {children}
+      {error && (
+        <p
+          className="text-xs mt-1.5"
+          style={{ color: 'oklch(0.55 0.18 25)' }}
+        >
+          {error}
+        </p>
+      )}
+    </div>
   )
 }
 
