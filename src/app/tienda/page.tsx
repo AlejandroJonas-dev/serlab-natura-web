@@ -4,36 +4,37 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import Image from 'next/image'
-import {
-  ChevronDown,
-  ChevronRight,
-  Leaf,
-  Package,
-  RotateCcw,
-  Search,
-  ShieldCheck,
-  ShoppingBag,
-  Truck,
-} from 'lucide-react'
+import { ChevronDown, ChevronRight, Search } from 'lucide-react'
 import { productsApi, productCategoriesApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
 import type { Product, ProductCategoryNode } from '@/types'
 
+// ─── PRODUCT CARD ─────────────────────────────────────────────────────────────
+// Foto-first editorial: la imagen del producto es la protagonista.
+// Sin iconos decorativos; solo tipografía y la propia foto cuentan la historia.
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const addItem = useCartStore((s) => s.addItem)
   const outOfStock = product.stock === 0
 
+  const formattedPrice = product.price.toFixed(2).replace('.', ',')
+  // Detectar la "subdescripción" tras la barra: "Bileina 60 perlas / Bote 60 perlas"
+  const [mainName, ...subParts] = product.name.split(' / ')
+  const subtitle = subParts.join(' / ').trim() || null
+
   return (
-    <div
-      className={`reveal reveal-delay-${Math.min((index % 6) + 1, 6)} group flex flex-col card-lift`}
+    <article
+      className={`reveal reveal-delay-${Math.min((index % 6) + 1, 6)} group flex flex-col`}
       style={{
         background: 'oklch(0.979 0.004 90)',
-        border: '1px solid oklch(0.656 0.016 78 / 0.15)',
+        border: '1px solid oklch(0.656 0.016 78 / 0.12)',
+        borderColor: product.isFeatured
+          ? 'oklch(0.668 0.063 64 / 0.5)'
+          : 'oklch(0.656 0.016 78 / 0.12)',
       }}
     >
       <Link
         href={`/tienda/${product.slug}`}
-        className="block aspect-square relative overflow-hidden img-zoom"
+        className="block aspect-[4/5] relative overflow-hidden"
         style={{ background: 'oklch(0.962 0.005 90)' }}
       >
         {product.images?.[0] ? (
@@ -41,49 +42,58 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             src={product.images[0]}
             alt={product.name}
             fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            style={{
+              filter: outOfStock ? 'grayscale(0.85)' : 'none',
+              opacity: outOfStock ? 0.65 : 1,
+            }}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package
-              className="w-12 h-12"
-              style={{ color: 'oklch(0.656 0.016 78 / 0.4)' }}
-            />
-          </div>
-        )}
-        {outOfStock && (
           <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ background: 'oklch(0.979 0.004 90 / 0.75)' }}
+            className="w-full h-full flex items-center justify-center text-3xl"
+            style={{
+              fontFamily: 'var(--font-playfair), serif',
+              color: 'oklch(0.656 0.016 78 / 0.45)',
+            }}
           >
-            <span
-              className="text-xs tracking-[0.15em] uppercase"
-              style={{ color: 'oklch(0.656 0.016 78)' }}
-            >
-              Agotado
-            </span>
+            ·
           </div>
         )}
+
         {product.isFeatured && !outOfStock && (
-          <div
-            className="absolute top-3 left-3 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase"
-            style={{ background: 'oklch(0.668 0.063 64)', color: 'oklch(0.979 0.004 90)' }}
+          <span
+            className="absolute top-4 left-4 text-[10px] tracking-[0.3em] uppercase"
+            style={{ color: 'oklch(0.668 0.063 64)' }}
           >
-            Destacado
-          </div>
+            — Selección
+          </span>
+        )}
+
+        {outOfStock && (
+          <span
+            className="absolute top-1/2 left-0 right-0 -translate-y-1/2 text-center text-xs tracking-[0.4em] uppercase py-2"
+            style={{
+              background: 'oklch(0.979 0.004 90 / 0.92)',
+              color: 'oklch(0.21 0 0)',
+              fontFamily: 'var(--font-playfair), serif',
+            }}
+          >
+            Agotado
+          </span>
         )}
       </Link>
 
-      <div className="flex-1 flex flex-col p-5">
+      <div className="flex-1 flex flex-col p-5 lg:p-6">
         <p
-          className="text-[10px] tracking-[0.2em] uppercase mb-2"
+          className="text-[10px] tracking-[0.25em] uppercase mb-3"
           style={{ color: 'oklch(0.668 0.063 64)' }}
         >
           {product.category?.name ?? 'Producto'}
         </p>
+
         <h3
-          className="text-base leading-snug mb-2 flex-1"
+          className="text-[17px] leading-[1.25] mb-1"
           style={{
             fontFamily: 'var(--font-playfair), serif',
             color: 'oklch(0.21 0 0)',
@@ -91,47 +101,65 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         >
           <Link
             href={`/tienda/${product.slug}`}
-            className="hover:text-[oklch(0.668_0.063_64)] transition-colors"
+            className="transition-colors hover:text-[oklch(0.668_0.063_64)]"
           >
-            {product.name}
+            {mainName}
           </Link>
         </h3>
-        {product.brand && (
+
+        {subtitle && (
           <p
-            className="text-xs mb-3"
-            style={{ color: 'oklch(0.656 0.016 78)' }}
+            className="text-xs italic leading-snug mb-4"
+            style={{
+              fontFamily: 'var(--font-playfair), serif',
+              color: 'oklch(0.45 0 0)',
+            }}
           >
-            {product.brand}
+            {subtitle}
           </p>
         )}
-        <div className="flex items-center justify-between mt-2">
+
+        <div
+          className="flex items-baseline justify-between mt-auto pt-5 border-t"
+          style={{ borderColor: 'oklch(0.656 0.016 78 / 0.18)' }}
+        >
           <span
             className="text-base font-medium tabular-nums"
-            style={{ color: 'oklch(0.668 0.063 64)' }}
+            style={{
+              color: 'oklch(0.21 0 0)',
+              fontFamily: 'var(--font-playfair), serif',
+            }}
           >
-            {product.price.toFixed(2).replace('.', ',')}€
+            {formattedPrice}€
           </span>
+
           <button
             onClick={(e) => {
               e.preventDefault()
               addItem(product)
             }}
             disabled={outOfStock}
-            className="w-9 h-9 flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{
-              background: 'oklch(0.21 0 0)',
-              color: 'oklch(0.979 0.004 90)',
-            }}
+            className="group/btn inline-flex items-baseline gap-2 text-[11px] tracking-[0.25em] uppercase transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ color: 'oklch(0.21 0 0)' }}
             aria-label={`Añadir ${product.name} al carrito`}
           >
-            <ShoppingBag className="w-4 h-4" />
+            <span className="border-b border-[oklch(0.21_0_0)] group-hover/btn:border-[oklch(0.668_0.063_64)] group-hover/btn:text-[oklch(0.668_0.063_64)] transition-colors pb-0.5">
+              Añadir
+            </span>
+            <span
+              aria-hidden
+              className="transition-transform group-hover/btn:translate-x-1"
+            >
+              →
+            </span>
           </button>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
 
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function TiendaPage() {
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
@@ -153,7 +181,6 @@ export default function TiendaPage() {
   const tree: ProductCategoryNode[] = treeQuery.data?.data?.categories ?? []
   const allProducts: Product[] = productsQuery.data?.data?.products ?? []
 
-  // Mapas auxiliares: ruta y descendientes para cada categoría
   const { pathById, descendantIdsById, byId } = useMemo(() => {
     const pathMap = new Map<string, string[]>()
     const descMap = new Map<string, Set<string>>()
@@ -184,11 +211,11 @@ export default function TiendaPage() {
     return { pathById: pathMap, descendantIdsById: descMap, byId: byIdMap }
   }, [tree])
 
-  // Filtrado: por categoría (incluyendo descendientes) + búsqueda
   const products = useMemo(() => {
     let list = allProducts
     if (activeCategoryId) {
-      const allowedIds = descendantIdsById.get(activeCategoryId) ?? new Set([activeCategoryId])
+      const allowedIds =
+        descendantIdsById.get(activeCategoryId) ?? new Set([activeCategoryId])
       list = list.filter((p) => allowedIds.has(p.categoryId))
     }
     if (search.trim()) {
@@ -196,7 +223,7 @@ export default function TiendaPage() {
       list = list.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
-          p.brand?.toLowerCase().includes(q)
+          p.brand?.toLowerCase().includes(q),
       )
     }
     return list
@@ -216,7 +243,6 @@ export default function TiendaPage() {
     setActiveCategoryId(id)
     setMobileFiltersOpen(false)
     if (id) {
-      // Auto-expand ancestors (open the tree to show selected)
       setExpanded((prev) => {
         const next = new Set(prev)
         let current = byId.get(id)
@@ -265,7 +291,6 @@ export default function TiendaPage() {
               const id = breadcrumb.slice(0, idx + 1).reduce<string | null>(
                 (acc, _, i) => {
                   if (i !== idx) return acc
-                  // find category whose path matches
                   for (const [cid, path] of pathById) {
                     if (
                       path.length === idx + 1 &&
@@ -275,7 +300,7 @@ export default function TiendaPage() {
                   }
                   return acc
                 },
-                null
+                null,
               )
               const isLast = idx === breadcrumb.length - 1
               return (
@@ -429,7 +454,10 @@ export default function TiendaPage() {
             <div className="min-w-0">
               {/* Search + count */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[oklch(0.656_0.016_78/0.12)]">
-                <p className="text-xs" style={{ color: 'oklch(0.656 0.016 78)' }}>
+                <p
+                  className="text-xs tracking-wider uppercase"
+                  style={{ color: 'oklch(0.656 0.016 78)' }}
+                >
                   {productsQuery.isLoading
                     ? 'Cargando...'
                     : `${products.length} producto${products.length !== 1 ? 's' : ''}`}
@@ -437,7 +465,7 @@ export default function TiendaPage() {
 
                 <div className="relative flex-shrink-0">
                   <Search
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
                     style={{ color: 'oklch(0.656 0.016 78)' }}
                   />
                   <input
@@ -457,43 +485,53 @@ export default function TiendaPage() {
               </div>
 
               {productsQuery.isLoading ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="animate-pulse"
-                      style={{ border: '1px solid oklch(0.656 0.016 78 / 0.1)' }}
-                    >
+                    <div key={i} className="animate-pulse">
                       <div
-                        className="aspect-square"
-                        style={{ background: 'oklch(0.9 0.003 90)' }}
+                        className="aspect-[4/5]"
+                        style={{ background: 'oklch(0.94 0.005 90)' }}
                       />
-                      <div className="p-5 space-y-2">
+                      <div className="p-5 space-y-3">
                         <div
-                          className="h-3 w-16 rounded"
-                          style={{ background: 'oklch(0.9 0.003 90)' }}
+                          className="h-2.5 w-20 rounded"
+                          style={{ background: 'oklch(0.94 0.005 90)' }}
                         />
                         <div
                           className="h-4 w-full rounded"
-                          style={{ background: 'oklch(0.9 0.003 90)' }}
+                          style={{ background: 'oklch(0.94 0.005 90)' }}
                         />
                       </div>
                     </div>
                   ))}
                 </div>
               ) : products.length > 0 ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10">
                   {products.map((p, i) => (
                     <ProductCard key={p.id} product={p} index={i} />
                   ))}
                 </div>
               ) : (
-                <div className="py-20 text-center">
-                  <Package
-                    className="w-10 h-10 mx-auto mb-4"
-                    style={{ color: 'oklch(0.656 0.016 78 / 0.4)' }}
-                  />
-                  <p className="text-sm" style={{ color: 'oklch(0.45 0 0)' }}>
+                <div
+                  className="py-24 text-center"
+                  style={{
+                    background: 'oklch(0.962 0.005 90)',
+                    border: '1px solid oklch(0.656 0.016 78 / 0.12)',
+                  }}
+                >
+                  <p
+                    className="text-2xl mb-3"
+                    style={{
+                      fontFamily: 'var(--font-playfair), serif',
+                      color: 'oklch(0.21 0 0)',
+                    }}
+                  >
+                    Sin resultados
+                  </p>
+                  <p
+                    className="text-sm mb-4"
+                    style={{ color: 'oklch(0.45 0 0)' }}
+                  >
                     No hay productos en esta selección.
                   </p>
                   {(activeCategoryId || search) && (
@@ -502,10 +540,10 @@ export default function TiendaPage() {
                         handleSelectCategory(null)
                         setSearch('')
                       }}
-                      className="text-sm mt-3 underline"
+                      className="text-xs tracking-[0.2em] uppercase transition-colors"
                       style={{ color: 'oklch(0.668 0.063 64)' }}
                     >
-                      Limpiar filtros
+                      — Limpiar filtros
                     </button>
                   )}
                 </div>
@@ -515,37 +553,55 @@ export default function TiendaPage() {
         </div>
       </section>
 
-      {/* Trust bar */}
+      {/* Trust bar — type-only, sin iconos */}
       <section
-        className="border-t border-[oklch(0.656_0.016_78/0.12)]"
+        className="border-t border-[oklch(0.656_0.016_78/0.15)]"
         style={{ background: 'oklch(0.962 0.005 90)' }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[oklch(0.656_0.016_78/0.1)]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {[
-              { Icon: Leaf, title: '100% natural', sub: 'Selección profesional' },
-              { Icon: Truck, title: 'Envío a España', sub: 'Gratis desde 50€' },
-              { Icon: ShieldCheck, title: 'Pago seguro', sub: 'Cifrado SSL' },
-              { Icon: RotateCcw, title: 'Devoluciones', sub: '30 días garantizados' },
-            ].map(({ Icon, title, sub }) => (
-              <div
-                key={title}
-                className="flex items-center gap-3 px-6 py-6 first:pl-0 last:pr-0"
-              >
-                <Icon
-                  className="w-5 h-5 flex-shrink-0"
-                  style={{ color: 'oklch(0.551 0.041 147)' }}
-                />
+              {
+                num: '01',
+                title: '100% natural',
+                sub: 'Selección profesional, sin parabenos ni siliconas.',
+              },
+              {
+                num: '02',
+                title: 'Envío a España',
+                sub: 'Gratis a partir de 50€. Entrega en 2-5 días.',
+              },
+              {
+                num: '03',
+                title: 'Pago seguro',
+                sub: 'Cifrado SSL y pasarela PCI-DSS certificada.',
+              },
+              {
+                num: '04',
+                title: 'Devoluciones',
+                sub: '30 días para que lo pruebes con calma.',
+              },
+            ].map(({ num, title, sub }) => (
+              <div key={num} className="flex items-start gap-4">
+                <span
+                  className="text-2xl tabular-nums leading-none flex-shrink-0"
+                  style={{
+                    fontFamily: 'var(--font-playfair), serif',
+                    color: 'oklch(0.668 0.063 64)',
+                  }}
+                >
+                  {num}
+                </span>
                 <div>
                   <p
-                    className="text-xs font-medium tracking-wide"
+                    className="text-xs tracking-[0.2em] uppercase mb-1.5"
                     style={{ color: 'oklch(0.21 0 0)' }}
                   >
                     {title}
                   </p>
                   <p
-                    className="text-xs mt-0.5"
-                    style={{ color: 'oklch(0.656 0.016 78)' }}
+                    className="text-xs leading-relaxed"
+                    style={{ color: 'oklch(0.45 0 0)' }}
                   >
                     {sub}
                   </p>
