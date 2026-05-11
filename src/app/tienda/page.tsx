@@ -4,20 +4,17 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ChevronDown, ChevronRight, Search } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import { productsApi, productCategoriesApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
 import type { Product, ProductCategoryNode } from '@/types'
 
 // ─── PRODUCT CARD ─────────────────────────────────────────────────────────────
-// Foto-first editorial: la imagen del producto es la protagonista.
-// Sin iconos decorativos; solo tipografía y la propia foto cuentan la historia.
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const addItem = useCartStore((s) => s.addItem)
   const outOfStock = product.stock === 0
 
   const formattedPrice = product.price.toFixed(2).replace('.', ',')
-  // Detectar la "subdescripción" tras la barra: "Bileina 60 perlas / Bote 60 perlas"
   const [mainName, ...subParts] = product.name.split(' / ')
   const subtitle = subParts.join(' / ').trim() || null
 
@@ -163,7 +160,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 export default function TiendaPage() {
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
-  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const treeQuery = useQuery({
@@ -182,7 +178,7 @@ export default function TiendaPage() {
   const allProducts: Product[] = productsQuery.data?.data?.products ?? []
 
   const { pathById, descendantIdsById, byId } = useMemo(() => {
-    const pathMap = new Map<string, string[]>()
+    const pathMap = new Map<string, ProductCategoryNode[]>()
     const descMap = new Map<string, Set<string>>()
     const byIdMap = new Map<string, ProductCategoryNode>()
 
@@ -196,10 +192,13 @@ export default function TiendaPage() {
       return ids
     }
 
-    const walk = (nodes: ProductCategoryNode[], parents: string[]) => {
+    const walk = (
+      nodes: ProductCategoryNode[],
+      parents: ProductCategoryNode[],
+    ) => {
       nodes.forEach((n) => {
         byIdMap.set(n.id, n)
-        const path = [...parents, n.name]
+        const path = [...parents, n]
         pathMap.set(n.id, path)
         walk(n.children, path)
       })
@@ -229,30 +228,21 @@ export default function TiendaPage() {
     return list
   }, [allProducts, activeCategoryId, descendantIdsById, search])
 
-  const breadcrumb = activeCategoryId ? pathById.get(activeCategoryId) ?? [] : []
-
-  const toggleExpand = (id: string) =>
-    setExpanded((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  const activeNode = activeCategoryId ? byId.get(activeCategoryId) : null
+  const breadcrumbNodes = activeCategoryId
+    ? pathById.get(activeCategoryId) ?? []
+    : []
+  // El nodo desde el que mostramos chips: el activo si tiene hijos, si no su padre
+  const chipsContextNode =
+    activeNode && activeNode.children && activeNode.children.length > 0
+      ? activeNode
+      : activeNode?.parentId
+        ? byId.get(activeNode.parentId) ?? null
+        : null
 
   const handleSelectCategory = (id: string | null) => {
     setActiveCategoryId(id)
     setMobileFiltersOpen(false)
-    if (id) {
-      setExpanded((prev) => {
-        const next = new Set(prev)
-        let current = byId.get(id)
-        while (current?.parentId) {
-          next.add(current.parentId)
-          current = byId.get(current.parentId)
-        }
-        return next
-      })
-    }
   }
 
   return (
@@ -287,33 +277,19 @@ export default function TiendaPage() {
             >
               Tienda
             </button>
-            {breadcrumb.map((name, idx) => {
-              const id = breadcrumb.slice(0, idx + 1).reduce<string | null>(
-                (acc, _, i) => {
-                  if (i !== idx) return acc
-                  for (const [cid, path] of pathById) {
-                    if (
-                      path.length === idx + 1 &&
-                      path.every((p, j) => p === breadcrumb[j])
-                    )
-                      return cid
-                  }
-                  return acc
-                },
-                null,
-              )
-              const isLast = idx === breadcrumb.length - 1
+            {breadcrumbNodes.map((node, idx) => {
+              const isLast = idx === breadcrumbNodes.length - 1
               return (
-                <span key={`${name}-${idx}`} className="flex items-center gap-2">
+                <span key={node.id} className="flex items-center gap-2">
                   <span>/</span>
                   {isLast ? (
-                    <span style={{ color: 'oklch(0.21 0 0)' }}>{name}</span>
+                    <span style={{ color: 'oklch(0.21 0 0)' }}>{node.name}</span>
                   ) : (
                     <button
-                      onClick={() => id && handleSelectCategory(id)}
+                      onClick={() => handleSelectCategory(node.id)}
                       className="hover:text-[oklch(0.668_0.063_64)] transition-colors"
                     >
-                      {name}
+                      {node.name}
                     </button>
                   )}
                 </span>
@@ -323,9 +299,7 @@ export default function TiendaPage() {
           <div className="flex items-center gap-3 mb-5">
             <span className="rule-cobre" />
             <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
-              {activeCategoryId
-                ? breadcrumb[breadcrumb.length - 1] ?? 'Categoría'
-                : 'Herbolario online'}
+              {activeNode ? activeNode.name : 'Herbolario online'}
             </span>
           </div>
           <h1
@@ -336,8 +310,8 @@ export default function TiendaPage() {
               color: 'oklch(0.21 0 0)',
             }}
           >
-            {activeCategoryId ? (
-              breadcrumb[breadcrumb.length - 1]
+            {activeNode ? (
+              activeNode.name
             ) : (
               <>
                 Productos naturales
@@ -350,13 +324,21 @@ export default function TiendaPage() {
               </>
             )}
           </h1>
-          {!activeCategoryId && (
+          {!activeNode && (
             <p
               className="text-base lg:text-lg max-w-xl leading-relaxed"
               style={{ color: 'oklch(0.45 0 0)' }}
             >
-              Fitoterapia, suplementos, cosmética natural y más. Todos elegidos
-              con rigor profesional y envíos a toda España.
+              Fitoterapia, suplementos, cosmética natural y más. Todos
+              elegidos con rigor profesional y envíos a toda España.
+            </p>
+          )}
+          {activeNode?.description && (
+            <p
+              className="text-base lg:text-lg max-w-xl leading-relaxed"
+              style={{ color: 'oklch(0.45 0 0)' }}
+            >
+              {activeNode.description}
             </p>
           )}
         </div>
@@ -368,7 +350,7 @@ export default function TiendaPage() {
         style={{ background: 'oklch(0.979 0.004 90)' }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-[260px_1fr] gap-10 lg:gap-12 items-start">
+          <div className="grid lg:grid-cols-[240px_1fr] gap-10 lg:gap-12 items-start">
             {/* Mobile filter toggle */}
             <button
               onClick={() => setMobileFiltersOpen((v) => !v)}
@@ -380,9 +362,7 @@ export default function TiendaPage() {
               }}
             >
               <span>
-                {activeCategoryId
-                  ? `Filtro: ${breadcrumb[breadcrumb.length - 1]}`
-                  : 'Filtrar por categoría'}
+                {activeNode ? `Categoría: ${activeNode.name}` : 'Categorías'}
               </span>
               <ChevronDown
                 className="w-4 h-4 transition-transform"
@@ -392,7 +372,7 @@ export default function TiendaPage() {
               />
             </button>
 
-            {/* Sidebar */}
+            {/* ─── SIDEBAR: solo raíces ────────────────────────────── */}
             <aside
               className={`${mobileFiltersOpen ? 'block' : 'hidden'} lg:block`}
               aria-label="Categorías"
@@ -407,53 +387,63 @@ export default function TiendaPage() {
                 </span>
               </div>
 
-              <button
-                onClick={() => handleSelectCategory(null)}
-                className="block w-full text-left text-sm py-2 mb-2 transition-colors"
-                style={{
-                  color:
-                    activeCategoryId === null
-                      ? 'oklch(0.668 0.063 64)'
-                      : 'oklch(0.21 0 0)',
-                  fontFamily: 'var(--font-playfair), serif',
-                  fontWeight: activeCategoryId === null ? 500 : 400,
-                  borderBottom:
-                    activeCategoryId === null
-                      ? '1px solid oklch(0.668 0.063 64)'
-                      : '1px solid transparent',
-                  paddingBottom: '6px',
-                  width: 'fit-content',
-                }}
-              >
-                Todos los productos
-              </button>
-
-              {treeQuery.isLoading ? (
-                <div className="space-y-2 pt-3">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="h-8 animate-pulse"
-                      style={{ background: 'oklch(0.94 0.005 90)' }}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <CategoryTree
-                  nodes={tree}
-                  expanded={expanded}
-                  activeId={activeCategoryId}
-                  onToggle={toggleExpand}
-                  onSelect={handleSelectCategory}
-                  level={0}
+              <nav className="space-y-1">
+                <SidebarLink
+                  active={!activeCategoryId}
+                  onClick={() => handleSelectCategory(null)}
+                  label="Todos los productos"
                 />
-              )}
+                {tree.map((root) => {
+                  const isInPath = breadcrumbNodes.some((n) => n.id === root.id)
+                  return (
+                    <SidebarLink
+                      key={root.id}
+                      active={isInPath}
+                      onClick={() => handleSelectCategory(root.id)}
+                      label={root.name}
+                      count={root.productCount}
+                    />
+                  )
+                })}
+              </nav>
             </aside>
 
-            {/* Grid area */}
+            {/* ─── GRID ───────────────────────────────────────────── */}
             <div className="min-w-0">
+              {/* Chips de subcategoría (solo si la activa tiene hijos o está en mitad del árbol) */}
+              {chipsContextNode && chipsContextNode.children.length > 0 && (
+                <div className="mb-8 pb-6 border-b border-[oklch(0.656_0.016_78/0.12)]">
+                  <p
+                    className="text-[10px] tracking-[0.25em] uppercase mb-3"
+                    style={{ color: 'oklch(0.656 0.016 78)' }}
+                  >
+                    Filtrar por subcategoría
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <ChipButton
+                      active={activeCategoryId === chipsContextNode.id}
+                      onClick={() => handleSelectCategory(chipsContextNode.id)}
+                      label={`Todos en ${chipsContextNode.name}`}
+                      count={chipsContextNode.productCount}
+                    />
+                    {chipsContextNode.children.map((child) => (
+                      <ChipButton
+                        key={child.id}
+                        active={
+                          activeCategoryId === child.id ||
+                          breadcrumbNodes.some((n) => n.id === child.id)
+                        }
+                        onClick={() => handleSelectCategory(child.id)}
+                        label={child.name}
+                        count={child.productCount}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Search + count */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[oklch(0.656_0.016_78/0.12)]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <p
                   className="text-xs tracking-wider uppercase"
                   style={{ color: 'oklch(0.656 0.016 78)' }}
@@ -473,9 +463,8 @@ export default function TiendaPage() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Buscar productos..."
-                    className="pl-9 pr-4 py-2 text-sm focus:outline-none transition-colors"
+                    className="pl-9 pr-4 py-2 text-sm focus:outline-none transition-colors w-full sm:w-[240px]"
                     style={{
-                      width: '240px',
                       background: 'oklch(0.962 0.005 90)',
                       border: '1px solid oklch(0.656 0.016 78 / 0.2)',
                       color: 'oklch(0.21 0 0)',
@@ -553,7 +542,7 @@ export default function TiendaPage() {
         </div>
       </section>
 
-      {/* Trust bar — type-only, sin iconos */}
+      {/* Trust bar — type-only */}
       <section
         className="border-t border-[oklch(0.656_0.016_78/0.15)]"
         style={{ background: 'oklch(0.962 0.005 90)' }}
@@ -615,91 +604,78 @@ export default function TiendaPage() {
   )
 }
 
-function CategoryTree({
-  nodes,
-  expanded,
-  activeId,
-  onToggle,
-  onSelect,
-  level,
+// ─── COMPONENTES ──────────────────────────────────────────────────────────────
+
+function SidebarLink({
+  active,
+  onClick,
+  label,
+  count,
 }: {
-  nodes: ProductCategoryNode[]
-  expanded: Set<string>
-  activeId: string | null
-  onToggle: (id: string) => void
-  onSelect: (id: string) => void
-  level: number
+  active: boolean
+  onClick: () => void
+  label: string
+  count?: number
 }) {
   return (
-    <ul className="space-y-0.5">
-      {nodes.map((node) => {
-        const hasChildren = node.children && node.children.length > 0
-        const isOpen = expanded.has(node.id)
-        const isActive = activeId === node.id
-        return (
-          <li key={node.id}>
-            <div
-              className="flex items-center gap-1 group"
-              style={{ paddingLeft: level === 0 ? 0 : `${level * 14}px` }}
-            >
-              <button
-                onClick={() => hasChildren && onToggle(node.id)}
-                className="w-5 h-5 flex-shrink-0 flex items-center justify-center"
-                style={{
-                  color: hasChildren
-                    ? 'oklch(0.656 0.016 78)'
-                    : 'transparent',
-                }}
-                aria-label={isOpen ? 'Cerrar' : 'Abrir'}
-                disabled={!hasChildren}
-              >
-                {hasChildren && isOpen ? (
-                  <ChevronDown className="w-3.5 h-3.5" />
-                ) : hasChildren ? (
-                  <ChevronRight className="w-3.5 h-3.5" />
-                ) : null}
-              </button>
+    <button
+      onClick={onClick}
+      className="w-full text-left flex items-baseline justify-between gap-3 py-2 text-sm transition-colors"
+      style={{
+        color: active ? 'oklch(0.668 0.063 64)' : 'oklch(0.21 0 0)',
+        fontFamily: 'var(--font-playfair), serif',
+        fontWeight: active ? 500 : 400,
+      }}
+    >
+      <span className="truncate">{label}</span>
+      {typeof count === 'number' && count > 0 && (
+        <span
+          className="text-[10px] tabular-nums flex-shrink-0"
+          style={{ color: 'oklch(0.656 0.016 78)' }}
+        >
+          {count}
+        </span>
+      )}
+    </button>
+  )
+}
 
-              <button
-                onClick={() => onSelect(node.id)}
-                className="flex-1 text-left py-1.5 text-sm transition-colors truncate"
-                style={{
-                  color: isActive
-                    ? 'oklch(0.668 0.063 64)'
-                    : level === 0
-                      ? 'oklch(0.21 0 0)'
-                      : 'oklch(0.45 0 0)',
-                  fontFamily:
-                    level === 0 ? 'var(--font-playfair), serif' : undefined,
-                  fontWeight: isActive ? 500 : 400,
-                }}
-              >
-                {node.name}
-                {typeof node.productCount === 'number' &&
-                  node.productCount > 0 && (
-                    <span
-                      className="ml-1.5 text-[10px] tabular-nums"
-                      style={{ color: 'oklch(0.656 0.016 78)' }}
-                    >
-                      ({node.productCount})
-                    </span>
-                  )}
-              </button>
-            </div>
-
-            {hasChildren && isOpen && (
-              <CategoryTree
-                nodes={node.children}
-                expanded={expanded}
-                activeId={activeId}
-                onToggle={onToggle}
-                onSelect={onSelect}
-                level={level + 1}
-              />
-            )}
-          </li>
-        )
-      })}
-    </ul>
+function ChipButton({
+  active,
+  onClick,
+  label,
+  count,
+}: {
+  active: boolean
+  onClick: () => void
+  label: string
+  count?: number
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="inline-flex items-baseline gap-1.5 px-3 py-1.5 text-xs transition-colors"
+      style={{
+        background: active ? 'oklch(0.21 0 0)' : 'oklch(0.962 0.005 90)',
+        color: active ? 'oklch(0.979 0.004 90)' : 'oklch(0.21 0 0)',
+        border: active
+          ? '1px solid oklch(0.21 0 0)'
+          : '1px solid oklch(0.656 0.016 78 / 0.25)',
+      }}
+    >
+      <span>{label}</span>
+      {typeof count === 'number' && count > 0 && (
+        <span
+          className="text-[10px] tabular-nums"
+          style={{
+            color: active
+              ? 'oklch(0.979 0.004 90 / 0.7)'
+              : 'oklch(0.656 0.016 78)',
+          }}
+        >
+          {count}
+        </span>
+      )}
+    </button>
   )
 }
