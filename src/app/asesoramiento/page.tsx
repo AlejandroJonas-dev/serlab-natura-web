@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -55,38 +56,61 @@ export default function AsesoramientoPage() {
             <span style={{ color: 'oklch(0.21 0 0)' }}>Asesoramiento</span>
           </nav>
 
-          <div className="flex items-center gap-3 mb-5">
-            <span className="rule-cobre" />
-            <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
-              Servicio gratuito
-            </span>
-          </div>
+          <div className="grid lg:grid-cols-[1fr_minmax(0,_22rem)] gap-12 lg:gap-16 items-center">
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="rule-cobre" />
+                <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
+                  Servicio gratuito
+                </span>
+              </div>
 
-          <h1
-            id="ase-h1"
-            className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
-            style={{
-              fontFamily: 'var(--font-playfair), serif',
-              color: 'oklch(0.21 0 0)',
-            }}
-          >
-            ¿Necesitas un consejo
-            <em
-              className="block not-italic italic"
-              style={{ color: 'oklch(0.551 0.041 147)' }}
+              <h1
+                id="ase-h1"
+                className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
+                style={{
+                  fontFamily: 'var(--font-playfair), serif',
+                  color: 'oklch(0.21 0 0)',
+                }}
+              >
+                ¿Necesitas un consejo
+                <em
+                  className="block not-italic italic"
+                  style={{ color: 'oklch(0.551 0.041 147)' }}
+                >
+                  de verdad?
+                </em>
+              </h1>
+
+              <p
+                className="text-base lg:text-lg max-w-2xl leading-relaxed"
+                style={{ color: 'oklch(0.45 0 0)' }}
+              >
+                Nuestro equipo te asesora sin coste para que entiendas qué
+                tomar, cómo combinarlo y cuándo. Sin productos genéricos,
+                sin compromiso de compra y con la transparencia de quien
+                lleva años en consulta.
+              </p>
+            </div>
+
+            {/* Foto: atención en el mostrador */}
+            <div
+              className="hidden lg:block relative aspect-[3/4] overflow-hidden"
+              style={{
+                background: 'oklch(0.962 0.005 90)',
+                border: '1px solid oklch(0.656 0.016 78 / 0.2)',
+              }}
             >
-              de verdad?
-            </em>
-          </h1>
-
-          <p
-            className="text-base lg:text-lg max-w-2xl leading-relaxed"
-            style={{ color: 'oklch(0.45 0 0)' }}
-          >
-            Nuestro equipo te asesora sin coste para que entiendas qué tomar,
-            cómo combinarlo y cuándo. Sin productos genéricos, sin compromiso
-            de compra y con la transparencia de quien lleva años en consulta.
-          </p>
+              <Image
+                src="/images/serlab/atencion.webp"
+                alt="Atención personalizada en el centro Serlab Natura"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 0px, 352px"
+                priority
+              />
+            </div>
+          </div>
         </div>
       </section>
 

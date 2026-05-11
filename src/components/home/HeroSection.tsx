@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 
 export function HeroSection() {
@@ -117,48 +118,22 @@ export function HeroSection() {
 
           {/* Right — visual */}
           <div className="hidden lg:flex items-center justify-center relative animate-hero-4">
-            {/* Main image area */}
+            {/* Main image area: foto real del mostrador del centro */}
             <div
-              className="relative w-full max-w-md aspect-[4/5]"
+              className="relative w-full max-w-md aspect-[4/5] overflow-hidden"
               style={{
-                background:
-                  'linear-gradient(160deg, oklch(0.551 0.041 147 / 0.12) 0%, oklch(0.668 0.063 64 / 0.08) 100%)',
+                background: 'oklch(0.962 0.005 90)',
                 border: '1px solid oklch(0.656 0.016 78 / 0.2)',
               }}
             >
-              {/* Placeholder botanical illustration */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg viewBox="0 0 200 280" className="w-3/4 h-3/4 opacity-25" fill="none">
-                  {/* Stem */}
-                  <line x1="100" y1="260" x2="100" y2="80" stroke="oklch(0.551 0.041 147)" strokeWidth="2" />
-                  {/* Leaves */}
-                  <path d="M100 200 C100 200 60 170 55 130 C50 90 90 80 100 120" fill="oklch(0.551 0.041 147)" opacity="0.7" />
-                  <path d="M100 200 C100 200 140 170 145 130 C150 90 110 80 100 120" fill="oklch(0.551 0.041 147)" opacity="0.5" />
-                  <path d="M100 150 C100 150 65 125 62 90 C59 55 95 50 100 85" fill="oklch(0.551 0.041 147)" opacity="0.6" />
-                  <path d="M100 150 C100 150 135 125 138 90 C141 55 105 50 100 85" fill="oklch(0.551 0.041 147)" opacity="0.4" />
-                  {/* Flower */}
-                  <circle cx="100" cy="75" r="12" fill="oklch(0.668 0.063 64)" opacity="0.6" />
-                  <circle cx="100" cy="75" r="6" fill="oklch(0.668 0.063 64)" opacity="0.9" />
-                  {/* Petals */}
-                  {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
-                    const rad = (angle * Math.PI) / 180
-                    const x = 100 + Math.cos(rad) * 20
-                    const y = 75 + Math.sin(rad) * 20
-                    return (
-                      <ellipse
-                        key={i}
-                        cx={x}
-                        cy={y}
-                        rx="7"
-                        ry="4"
-                        transform={`rotate(${angle}, ${x}, ${y})`}
-                        fill="oklch(0.668 0.063 64)"
-                        opacity="0.4"
-                      />
-                    )
-                  })}
-                </svg>
-              </div>
+              <Image
+                src="/images/serlab/mostrador.webp"
+                alt="Mostrador de Serlab Natura en Córdoba"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 0px, 480px"
+                priority
+              />
 
               {/* Floating card — service highlight */}
               <div

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, MapPin } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -56,46 +57,67 @@ export default function QuienesSomosPage() {
             <span style={{ color: 'oklch(0.21 0 0)' }}>Quiénes somos</span>
           </nav>
 
-          <div className="flex items-center gap-3 mb-5">
-            <span className="rule-cobre" />
-            <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
-              Sobre Serlab Natura
-            </span>
-          </div>
+          <div className="grid lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-end">
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="rule-cobre" />
+                <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
+                  Sobre Serlab Natura
+                </span>
+              </div>
 
-          <h1
-            id="qs-h1"
-            className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
-            style={{
-              fontFamily: 'var(--font-playfair), serif',
-              color: 'oklch(0.21 0 0)',
-            }}
-          >
-            Un centro pensado para
-            <em
-              className="block not-italic italic"
-              style={{ color: 'oklch(0.551 0.041 147)' }}
+              <h1
+                id="qs-h1"
+                className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
+                style={{
+                  fontFamily: 'var(--font-playfair), serif',
+                  color: 'oklch(0.21 0 0)',
+                }}
+              >
+                Un centro pensado para
+                <em
+                  className="block not-italic italic"
+                  style={{ color: 'oklch(0.551 0.041 147)' }}
+                >
+                  acompañarte de verdad.
+                </em>
+              </h1>
+
+              <p
+                className="text-base lg:text-lg max-w-2xl leading-relaxed"
+                style={{ color: 'oklch(0.45 0 0)' }}
+              >
+                En Serlab Natura llevamos años trabajando con un mismo
+                objetivo: ofrecer en Córdoba un espacio donde la salud
+                natural se entienda como un proceso completo —cuerpo, mente
+                y entorno— y donde cada persona reciba un trato a la altura.
+              </p>
+            </div>
+
+            {/* Detalle visual: aromas y lavanda */}
+            <div
+              className="hidden lg:block relative w-56 aspect-[3/4] flex-shrink-0 overflow-hidden"
+              style={{
+                background: 'oklch(0.962 0.005 90)',
+                border: '1px solid oklch(0.656 0.016 78 / 0.2)',
+              }}
             >
-              acompañarte de verdad.
-            </em>
-          </h1>
-
-          <p
-            className="text-base lg:text-lg max-w-2xl leading-relaxed"
-            style={{ color: 'oklch(0.45 0 0)' }}
-          >
-            En Serlab Natura llevamos años trabajando con un mismo objetivo:
-            ofrecer en Córdoba un espacio donde la salud natural se entienda
-            como un proceso completo —cuerpo, mente y entorno— y donde cada
-            persona reciba un trato a la altura.
-          </p>
+              <Image
+                src="/images/serlab/detalle.webp"
+                alt="Aceites esenciales y lavanda — Serlab Natura"
+                fill
+                className="object-cover"
+                sizes="224px"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ─── Historia ────────────────────────────────────────────── */}
       <section className="py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             <div className="lg:col-span-4">
               <div className="flex items-center gap-3 mb-5">
                 <span className="rule-cobre" />
@@ -104,7 +126,7 @@ export default function QuienesSomosPage() {
                 </span>
               </div>
               <h2
-                className="text-3xl lg:text-4xl leading-tight"
+                className="text-3xl lg:text-4xl leading-tight mb-8"
                 style={{
                   fontFamily: 'var(--font-playfair), serif',
                   color: 'oklch(0.21 0 0)',
@@ -118,6 +140,23 @@ export default function QuienesSomosPage() {
                   oficio.
                 </em>
               </h2>
+
+              {/* Foto de la presentación/historia */}
+              <div
+                className="relative aspect-[4/3] overflow-hidden"
+                style={{
+                  background: 'oklch(0.962 0.005 90)',
+                  border: '1px solid oklch(0.656 0.016 78 / 0.2)',
+                }}
+              >
+                <Image
+                  src="/images/serlab/historia.webp"
+                  alt="Charla sobre la historia de Serlab Natura"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 400px"
+                />
+              </div>
             </div>
 
             <div className="lg:col-span-7 lg:col-start-6">
@@ -157,6 +196,27 @@ export default function QuienesSomosPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ─── Banner: foto del espacio interior ───────────────────── */}
+      <section
+        className="relative h-72 lg:h-[28rem] overflow-hidden"
+        aria-hidden
+      >
+        <Image
+          src="/images/serlab/espacio.webp"
+          alt="Interior del centro Serlab Natura"
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0) 50%, oklch(0.21 0 0 / 0.3) 100%)',
+          }}
+        />
       </section>
 
       {/* ─── Filosofía / 3 pilares ───────────────────────────────── */}
