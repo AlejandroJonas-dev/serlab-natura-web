@@ -9,6 +9,8 @@ import { ArrowLeft, Minus, Plus } from 'lucide-react'
 import { productsApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
 import type { Product } from '@/types'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo'
 
 // Las descripciones del dataset suelen llegar con secciones en mayúsculas
 // dentro del mismo texto: "INDICACIÓN ... PRECAUCIONES ... COMPOSICIÓN ...
@@ -176,6 +178,30 @@ export default function ProductDetailPage() {
 
   return (
     <main style={{ background: 'oklch(0.979 0.004 90)' }}>
+      {/* Structured data: Product + Breadcrumb para que Google muestre
+          el precio, disponibilidad y la ruta de migas en los resultados. */}
+      <JsonLd
+        data={productJsonLd({
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          price: product.price,
+          images: product.images,
+          brand: product.brand,
+          stock: product.stock,
+          category: product.category,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Inicio', url: '/' },
+          { name: 'Tienda', url: '/tienda' },
+          ...(product.category
+            ? [{ name: product.category.name, url: '/tienda' }]
+            : []),
+          { name: product.name, url: `/tienda/${product.slug}` },
+        ])}
+      />
       {/* Breadcrumb */}
       <div
         className="py-4 px-6 lg:px-8 border-b border-[oklch(0.656_0.016_78/0.1)]"
