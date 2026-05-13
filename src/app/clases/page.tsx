@@ -27,7 +27,10 @@ function ClassCard({ cls, index }: { cls: GroupClass; index: number }) {
 
       <div
         className="aspect-video relative overflow-hidden img-zoom"
-        style={{ background: 'oklch(0.551 0.041 147 / 0.08)' }}
+        style={{
+          background:
+            'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.18) 0%, oklch(0.668 0.063 64 / 0.12) 100%)',
+        }}
       >
         {cls.images?.[0] ? (
           <Image
@@ -38,16 +41,29 @@ function ClassCard({ cls, index }: { cls: GroupClass; index: number }) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          // Placeholder editorial: monograma con la inicial sobre el
+          // gradiente verde→cobre. Igual que en /servicios para mantener
+          // consistencia en el catálogo.
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span
+              className="block w-12 h-px mb-4"
+              style={{ background: 'oklch(0.668 0.063 64 / 0.7)' }}
+            />
+            <span
+              className="leading-none italic"
               style={{
                 fontFamily: 'var(--font-playfair), serif',
                 fontSize: '5rem',
-                color: 'oklch(0.551 0.041 147 / 0.15)',
-                lineHeight: 1,
+                color: 'oklch(0.21 0 0 / 0.45)',
               }}
             >
               {cls.name.charAt(0)}
+            </span>
+            <span
+              className="mt-4 text-[10px] tracking-[0.35em] uppercase"
+              style={{ color: 'oklch(0.668 0.063 64)' }}
+            >
+              Clase Serlab
             </span>
           </div>
         )}

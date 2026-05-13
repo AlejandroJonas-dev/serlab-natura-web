@@ -57,61 +57,63 @@ export default function QuienesSomosPage() {
             <span style={{ color: 'oklch(0.21 0 0)' }}>Quiénes somos</span>
           </nav>
 
-          <div className="grid lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-end">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <span className="rule-cobre" />
-                <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
-                  Sobre Serlab Natura
-                </span>
-              </div>
-
-              <h1
-                id="qs-h1"
-                className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
-                style={{
-                  fontFamily: 'var(--font-playfair), serif',
-                  color: 'oklch(0.21 0 0)',
-                }}
-              >
-                Un centro pensado para
-                <em
-                  className="block not-italic italic"
-                  style={{ color: 'oklch(0.551 0.041 147)' }}
-                >
-                  acompañarte de verdad.
-                </em>
-              </h1>
-
-              <p
-                className="text-base lg:text-lg max-w-2xl leading-relaxed"
-                style={{ color: 'oklch(0.45 0 0)' }}
-              >
-                En Serlab Natura llevamos años trabajando con un mismo
-                objetivo: ofrecer en Córdoba un espacio donde la salud
-                natural se entienda como un proceso completo —cuerpo, mente
-                y entorno— y donde cada persona reciba un trato a la altura.
-              </p>
-            </div>
-
-            {/* Detalle visual: aromas y lavanda */}
-            <div
-              className="hidden lg:block relative w-56 aspect-[3/4] flex-shrink-0 overflow-hidden"
-              style={{
-                background: 'oklch(0.962 0.005 90)',
-                border: '1px solid oklch(0.656 0.016 78 / 0.2)',
-              }}
-            >
-              <Image
-                src="/images/serlab/detalle.webp"
-                alt="Aceites esenciales y lavanda — Serlab Natura"
-                fill
-                className="object-cover"
-                sizes="224px"
-              />
-            </div>
+          <div className="flex items-center gap-3 mb-5">
+            <span className="rule-cobre" />
+            <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
+              Sobre Serlab Natura
+            </span>
           </div>
+
+          <h1
+            id="qs-h1"
+            className="text-4xl lg:text-6xl mb-6 max-w-3xl leading-[1.1]"
+            style={{
+              fontFamily: 'var(--font-playfair), serif',
+              color: 'oklch(0.21 0 0)',
+            }}
+          >
+            Un centro pensado para
+            <em
+              className="block not-italic italic"
+              style={{ color: 'oklch(0.551 0.041 147)' }}
+            >
+              acompañarte de verdad.
+            </em>
+          </h1>
+
+          <p
+            className="text-base lg:text-lg max-w-2xl leading-relaxed"
+            style={{ color: 'oklch(0.45 0 0)' }}
+          >
+            En Serlab Natura llevamos años trabajando con un mismo
+            objetivo: ofrecer en Córdoba un espacio donde la salud
+            natural se entienda como un proceso completo —cuerpo, mente
+            y entorno— y donde cada persona reciba un trato a la altura.
+          </p>
         </div>
+      </section>
+
+      {/* ─── Banner: atención humana ─────────────────────────────── */}
+      <section
+        className="relative h-72 lg:h-[28rem] overflow-hidden"
+        aria-hidden
+      >
+        <Image
+          src="/images/serlab/atencion.webp"
+          alt="Atención personalizada en Serlab Natura"
+          fill
+          className="object-cover"
+          style={{ objectPosition: 'center 30%' }}
+          sizes="100vw"
+          quality={90}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0) 50%, oklch(0.21 0 0 / 0.3) 100%)',
+          }}
+        />
       </section>
 
       {/* ─── Historia ────────────────────────────────────────────── */}
@@ -126,7 +128,7 @@ export default function QuienesSomosPage() {
                 </span>
               </div>
               <h2
-                className="text-3xl lg:text-4xl leading-tight mb-8"
+                className="text-3xl lg:text-4xl leading-tight"
                 style={{
                   fontFamily: 'var(--font-playfair), serif',
                   color: 'oklch(0.21 0 0)',
@@ -140,23 +142,6 @@ export default function QuienesSomosPage() {
                   oficio.
                 </em>
               </h2>
-
-              {/* Foto de la presentación/historia */}
-              <div
-                className="relative aspect-[4/3] overflow-hidden"
-                style={{
-                  background: 'oklch(0.962 0.005 90)',
-                  border: '1px solid oklch(0.656 0.016 78 / 0.2)',
-                }}
-              >
-                <Image
-                  src="/images/serlab/historia.webp"
-                  alt="Charla sobre la historia de Serlab Natura"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 400px"
-                />
-              </div>
             </div>
 
             <div className="lg:col-span-7 lg:col-start-6">
@@ -209,6 +194,7 @@ export default function QuienesSomosPage() {
           fill
           className="object-cover"
           sizes="100vw"
+          quality={90}
         />
         <div
           className="absolute inset-0"
@@ -282,19 +268,42 @@ export default function QuienesSomosPage() {
         </div>
       </section>
 
-      {/* ─── Manifiesto / cita ───────────────────────────────────── */}
-      <section className="py-20 lg:py-28">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+      {/* ─── Manifiesto: cita sobre fondo de la charla "Historia" ── */}
+      <section className="relative py-28 lg:py-36 overflow-hidden">
+        <Image
+          src="/images/serlab/historia.webp"
+          alt="Equipo de Serlab Natura presentando su trayectoria"
+          fill
+          className="object-cover"
+          style={{ objectPosition: 'center 30%' }}
+          sizes="100vw"
+          quality={90}
+        />
+        {/* Overlay oscuro para garantizar legibilidad del texto */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0.78) 0%, oklch(0.21 0 0 / 0.65) 100%)',
+          }}
+        />
+
+        <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+          <span
+            className="inline-block w-10 h-px mx-auto mb-8"
+            style={{ background: 'oklch(0.85 0.05 80)' }}
+          />
           <p
-            className="text-2xl lg:text-3xl leading-[1.4]"
+            className="text-2xl lg:text-4xl leading-[1.35]"
             style={{
               fontFamily: 'var(--font-playfair), serif',
-              color: 'oklch(0.21 0 0)',
+              color: 'oklch(0.979 0.004 90)',
             }}
           >
             <em
               className="block italic mb-4"
-              style={{ color: 'oklch(0.551 0.041 147)' }}
+              style={{ color: 'oklch(0.85 0.05 80)' }}
             >
               «No vendemos productos.
             </em>
@@ -302,8 +311,8 @@ export default function QuienesSomosPage() {
             toma y enseñamos a moverse mejor. Lo demás viene solo.»
           </p>
           <p
-            className="text-xs tracking-[0.3em] uppercase mt-8"
-            style={{ color: 'oklch(0.668 0.063 64)' }}
+            className="text-xs tracking-[0.3em] uppercase mt-10"
+            style={{ color: 'oklch(0.85 0.05 80)' }}
           >
             — Equipo Serlab Natura
           </p>

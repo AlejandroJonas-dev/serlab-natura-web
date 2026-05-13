@@ -116,11 +116,14 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right — visual */}
-          <div className="hidden lg:flex items-center justify-center relative animate-hero-4">
-            {/* Main image area: foto real del mostrador del centro */}
+          {/* Right — visual: foto real del centro con caption integrado.
+              Los flotantes con offsets negativos se cortaban contra el borde
+              del viewport y restaban legibilidad. Ahora un único pie de
+              imagen en la zona inferior, sobre un degradado oscuro que
+              asegura contraste para el texto. */}
+          <div className="hidden lg:flex items-stretch justify-center relative animate-hero-4">
             <div
-              className="relative w-full max-w-md aspect-[4/5] overflow-hidden"
+              className="relative w-full aspect-[4/5] max-h-[640px] overflow-hidden"
               style={{
                 background: 'oklch(0.962 0.005 90)',
                 border: '1px solid oklch(0.656 0.016 78 / 0.2)',
@@ -131,48 +134,72 @@ export function HeroSection() {
                 alt="Mostrador de Serlab Natura en Córdoba"
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 0px, 480px"
+                style={{ objectPosition: 'center 60%' }}
+                sizes="(max-width: 1024px) 0px, 50vw"
+                quality={90}
                 priority
               />
 
-              {/* Floating card — service highlight */}
+              {/* Gradiente sutil que oscurece el tercio inferior para el caption */}
               <div
-                className="absolute -left-12 bottom-16 w-44 p-4 shadow-xl"
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none"
                 style={{
-                  background: 'oklch(0.979 0.004 90)',
-                  border: '1px solid oklch(0.668 0.063 64 / 0.3)',
+                  background:
+                    'linear-gradient(180deg, transparent 0%, oklch(0.18 0 0 / 0.75) 100%)',
                 }}
-              >
-                <span
-                  className="block text-xs tracking-[0.15em] uppercase mb-1"
-                  style={{ color: 'oklch(0.668 0.063 64)' }}
-                >
-                  Tecnología
-                </span>
-                <span
-                  className="block text-sm font-medium"
-                  style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.21 0 0)' }}
-                >
-                  INDIBA®
-                </span>
-                <span className="block text-xs text-[oklch(0.656_0.016_78)] mt-1">
-                  Radiofrecuencia avanzada
-                </span>
-              </div>
+              />
 
-              {/* Floating badge */}
-              <div
-                className="absolute -right-8 top-16 w-28 h-28 rounded-full flex flex-col items-center justify-center text-center shadow-lg"
-                style={{ background: 'oklch(0.551 0.041 147)', color: 'oklch(0.979 0.004 90)' }}
-              >
-                <span className="text-xs tracking-wider uppercase opacity-80">Desde</span>
-                <span
-                  className="text-2xl font-medium"
-                  style={{ fontFamily: 'var(--font-playfair), serif' }}
-                >
-                  40€
-                </span>
-                <span className="text-[10px] tracking-wider uppercase opacity-80">/ sesión</span>
+              {/* Caption integrado — sustituye a los dos cards flotantes */}
+              <div className="absolute inset-x-0 bottom-0 p-6">
+                <div className="flex items-end justify-between gap-6">
+                  <div>
+                    <span
+                      className="block text-[10px] tracking-[0.3em] uppercase mb-2"
+                      style={{ color: 'oklch(0.85 0.05 80)' }}
+                    >
+                      Tecnología avanzada
+                    </span>
+                    <span
+                      className="block text-2xl leading-none"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        color: 'oklch(0.979 0.004 90)',
+                      }}
+                    >
+                      INDIBA®
+                    </span>
+                    <span
+                      className="block text-xs mt-1.5"
+                      style={{ color: 'oklch(0.979 0.004 90 / 0.75)' }}
+                    >
+                      Radiofrecuencia con resultados visibles
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className="block text-[10px] tracking-[0.3em] uppercase mb-1"
+                      style={{ color: 'oklch(0.85 0.05 80)' }}
+                    >
+                      Desde
+                    </span>
+                    <span
+                      className="block text-3xl leading-none tabular-nums"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        color: 'oklch(0.979 0.004 90)',
+                      }}
+                    >
+                      40€
+                    </span>
+                    <span
+                      className="block text-[10px] tracking-wider uppercase mt-1"
+                      style={{ color: 'oklch(0.979 0.004 90 / 0.65)' }}
+                    >
+                      / sesión
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

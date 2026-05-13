@@ -21,25 +21,42 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       />
       <div
         className="aspect-[4/3] overflow-hidden relative"
-        style={{ background: 'oklch(0.551 0.041 147 / 0.06)' }}
+        style={{
+          background:
+            'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.18) 0%, oklch(0.668 0.063 64 / 0.12) 100%)',
+        }}
       >
         {service.images?.[0] ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={service.images[0]}
             alt={service.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          // Placeholder editorial: monograma con la inicial sobre un
+          // gradiente verde→cobre. Sustituye el icono genérico, mantiene
+          // el card legible cuando la empresa aún no ha subido la foto.
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span
+              className="block w-12 h-px mb-5"
+              style={{ background: 'oklch(0.668 0.063 64 / 0.7)' }}
+            />
+            <span
+              className="leading-none italic"
               style={{
                 fontFamily: 'var(--font-playfair), serif',
-                fontSize: '5rem',
-                lineHeight: 1,
-                color: 'oklch(0.551 0.041 147 / 0.12)',
+                fontSize: '6rem',
+                color: 'oklch(0.21 0 0 / 0.45)',
               }}
             >
               {service.name.charAt(0)}
+            </span>
+            <span
+              className="mt-5 text-[10px] tracking-[0.35em] uppercase"
+              style={{ color: 'oklch(0.668 0.063 64)' }}
+            >
+              Serlab Natura
             </span>
           </div>
         )}
