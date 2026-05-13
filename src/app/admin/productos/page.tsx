@@ -31,7 +31,10 @@ export default function AdminProductosPage() {
     queryFn: () => productCategoriesApi.getAll().then((r) => r.data),
   })
 
-  const products: Product[] = productsQuery.data?.data?.products ?? []
+  const products = useMemo<Product[]>(
+    () => productsQuery.data?.data?.products ?? [],
+    [productsQuery.data],
+  )
   const categories: ProductCategory[] =
     categoriesQuery.data?.data?.categories ?? []
 

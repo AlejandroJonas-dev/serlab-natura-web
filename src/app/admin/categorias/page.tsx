@@ -52,7 +52,10 @@ export default function AdminCategoriasPage() {
         .then((r) => r.data),
   })
 
-  const tree: ProductCategoryNode[] = treeQuery.data?.data?.categories ?? []
+  const tree = useMemo<ProductCategoryNode[]>(
+    () => treeQuery.data?.data?.categories ?? [],
+    [treeQuery.data],
+  )
   const flat: ProductCategory[] = flatQuery.data?.data?.categories ?? []
 
   // Mapa id → path "Padre / Hijo / Nieto" para el selector

@@ -11,7 +11,12 @@
       "Bash(tail -50 /tmp/build.log)",
       "Read(//tmp/**)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(npx ts-node *)",
+      "Bash(xxd)",
+      "Bash(echo \"BUILD=$?\")",
+      "Bash(echo \"API_TSC=$?\")",
+      "Bash(git push *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src\\config",

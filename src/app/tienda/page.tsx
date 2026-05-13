@@ -174,8 +174,14 @@ export default function TiendaPage() {
     queryFn: () => productsApi.getAll({ limit: 200 }).then((r) => r.data),
   })
 
-  const tree: ProductCategoryNode[] = treeQuery.data?.data?.categories ?? []
-  const allProducts: Product[] = productsQuery.data?.data?.products ?? []
+  const tree = useMemo<ProductCategoryNode[]>(
+    () => treeQuery.data?.data?.categories ?? [],
+    [treeQuery.data],
+  )
+  const allProducts = useMemo<Product[]>(
+    () => productsQuery.data?.data?.products ?? [],
+    [productsQuery.data],
+  )
 
   const { pathById, descendantIdsById, byId } = useMemo(() => {
     const pathMap = new Map<string, ProductCategoryNode[]>()

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowRight, Loader2, Waves, Leaf, Hand, Wind, Brain, Dumbbell } from 'lucide-react'
+import { ArrowRight, Waves, Leaf, Hand, Wind, Brain, Dumbbell } from 'lucide-react'
 import { servicesApi } from '@/lib/api'
 import type { Service } from '@/types'
 import { useReveal } from '@/hooks/useReveal'

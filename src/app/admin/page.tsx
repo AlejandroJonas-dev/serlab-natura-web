@@ -16,7 +16,6 @@ import {
   Sparkles,
   TrendingUp,
   UserPlus,
-  Users as UsersIcon,
 } from 'lucide-react'
 import { adminApi, bookingsApi, ordersApi, reviewsApi } from '@/lib/api'
 import type { Booking, DashboardStats, Order, Review } from '@/types'

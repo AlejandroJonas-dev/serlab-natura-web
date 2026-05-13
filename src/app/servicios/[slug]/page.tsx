@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, ArrowRight, Clock, CheckCircle2, Phone } from 'lucide-react'
 import { servicesApi } from '@/lib/api'
 import type { Service } from '@/types'
@@ -110,10 +111,13 @@ export default function ServiceDetailPage() {
               }}
             >
               {service.images?.[0] ? (
-                <img
+                <Image
                   src={service.images[0]}
                   alt={service.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  priority
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

@@ -134,7 +134,10 @@ export default function ServiciosPage() {
   })
 
   const categories: ServiceCategory[] = catData?.data?.categories ?? []
-  const allServices: Service[] = svcData?.data?.services ?? []
+  const allServices = useMemo<Service[]>(
+    () => svcData?.data?.services ?? [],
+    [svcData],
+  )
 
   const services = useMemo(
     () =>

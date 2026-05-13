@@ -31,7 +31,10 @@ export default function AdminServiciosPage() {
     queryFn: () => serviceCategoriesApi.getAll().then((r) => r.data),
   })
 
-  const services: Service[] = servicesQuery.data?.data?.services ?? []
+  const services = useMemo<Service[]>(
+    () => servicesQuery.data?.data?.services ?? [],
+    [servicesQuery.data],
+  )
   const categories: ServiceCategory[] =
     categoriesQuery.data?.data?.categories ?? []
 
