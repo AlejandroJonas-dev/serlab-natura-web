@@ -177,17 +177,17 @@ export default function ClasesPage() {
             className="text-4xl lg:text-5xl mb-6 max-w-2xl"
             style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.979 0.004 90)' }}
           >
-            Clases de cuerpo-mente
+            Tai-Chi, Pilates
             <em className="block not-italic italic" style={{ color: 'oklch(0.668 0.063 64)' }}>
-              para activar tu energía.
+              y Mindfulness.
             </em>
           </h1>
           <p
             className="text-base lg:text-lg max-w-xl leading-relaxed"
             style={{ color: 'oklch(0.979 0.004 90 / 0.8)' }}
           >
-            Grupos reducidos, instructores certificados y un espacio diseñado para que te
-            reconectes contigo mismo.
+            Clases semanales en grupos reducidos para moverse mejor, calmar la mente
+            y reconectar con el cuerpo. Instructores certificados y espacio propio en el centro.
           </p>
         </div>
       </section>

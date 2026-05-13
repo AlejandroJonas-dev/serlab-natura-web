@@ -142,7 +142,7 @@ export default function ServiciosPage() {
   const services = useMemo(
     () =>
       activeCategory
-        ? allServices.filter((s) => s.categoryId === activeCategory)
+        ? allServices.filter((s) => (s.categoryId ?? s.category?.id) === activeCategory)
         : allServices,
     [allServices, activeCategory]
   )

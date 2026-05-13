@@ -28,14 +28,15 @@ const STEPS = [
 ]
 
 const TOPICS = [
-  'Digestiones pesadas, hinchazón, tránsito intestinal',
-  'Defensas bajas, cansancio crónico o convalecencia',
-  'Sueño difícil, ansiedad o estrés mantenido',
-  'Cuidado de la piel: acné, sequedad, manchas, antiedad',
-  'Dolores articulares, recuperación deportiva',
-  'Salud hormonal femenina en cualquier etapa',
-  'Suplementación para deporte y rendimiento',
-  'Alimentación consciente, sin gluten, ecológica',
+  'Reflexología podal',
+  'Masaje craneosacral',
+  'Masaje metamórfico',
+  'Masaje relajante',
+  'Masaje descontracturante',
+  'Biomagnetismo',
+  'Kinesiología',
+  'Radiofrecuencia INDIBA',
+  'Limpieza facial Hydrafacial',
 ]
 
 export default function AsesoramientoPage() {
@@ -94,7 +95,7 @@ export default function AsesoramientoPage() {
 
       {/* ─── Banner: detalle de aromas y herbario ────────────────── */}
       <section
-        className="relative h-72 lg:h-[28rem] overflow-hidden"
+        className="relative h-[400px] lg:h-[560px] overflow-hidden"
         aria-hidden
       >
         <Image
@@ -102,15 +103,15 @@ export default function AsesoramientoPage() {
           alt="Aceites esenciales y lavanda en Serlab Natura"
           fill
           className="object-cover"
-          style={{ objectPosition: 'center 30%' }}
+          style={{ objectPosition: 'center 45%' }}
           sizes="100vw"
-          quality={90}
+          quality={92}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, oklch(0.21 0 0 / 0) 50%, oklch(0.21 0 0 / 0.3) 100%)',
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0.05) 0%, oklch(0.21 0 0 / 0) 35%, oklch(0.21 0 0 / 0.3) 100%)',
           }}
         />
       </section>
@@ -195,7 +196,7 @@ export default function AsesoramientoPage() {
               <div className="flex items-center gap-3 mb-5">
                 <span className="rule-cobre" />
                 <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
-                  Especialidades
+                  Nuestros servicios
                 </span>
               </div>
               <h2
@@ -205,20 +206,21 @@ export default function AsesoramientoPage() {
                   color: 'oklch(0.21 0 0)',
                 }}
               >
-                Algunas consultas
+                Lo que hacemos
                 <em
                   className="block italic"
                   style={{ color: 'oklch(0.551 0.041 147)' }}
                 >
-                  habituales.
+                  en el centro.
                 </em>
               </h2>
               <p
                 className="text-sm leading-relaxed max-w-md"
                 style={{ color: 'oklch(0.45 0 0)' }}
               >
-                Si tu caso es otro, nos lo cuentas. Si no es nuestro campo,
-                te lo decimos claro y te orientamos a quien sí pueda ayudarte.
+                Terapias manuales, tratamientos de estética avanzada y técnicas
+                de bienestar integral. Si tienes dudas sobre cuál te conviene,
+                te orientamos sin compromiso.
               </p>
             </div>
 
@@ -302,11 +304,8 @@ export default function AsesoramientoPage() {
               href="https://wa.me/34604230456?text=Hola%2C%20me%20gustar%C3%ADa%20un%20asesoramiento%20sin%20compromiso."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm tracking-wide border transition-all duration-300 hover:bg-[oklch(0.979_0.004_90)] hover:text-[oklch(0.21_0_0)]"
-              style={{
-                borderColor: 'oklch(0.979 0.004 90)',
-                color: 'oklch(0.979 0.004 90)',
-              }}
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm tracking-wide border transition-all duration-300 text-[oklch(0.979_0.004_90)] hover:bg-[oklch(0.979_0.004_90)] hover:text-[oklch(0.21_0_0)]"
+              style={{ borderColor: 'oklch(0.979 0.004 90)' }}
             >
               Escribir por WhatsApp
             </a>

@@ -95,7 +95,7 @@ export default function QuienesSomosPage() {
 
       {/* ─── Banner: atención humana ─────────────────────────────── */}
       <section
-        className="relative h-72 lg:h-[28rem] overflow-hidden"
+        className="relative h-[420px] lg:h-[580px] overflow-hidden"
         aria-hidden
       >
         <Image
@@ -103,15 +103,15 @@ export default function QuienesSomosPage() {
           alt="Atención personalizada en Serlab Natura"
           fill
           className="object-cover"
-          style={{ objectPosition: 'center 30%' }}
+          style={{ objectPosition: 'center center' }}
           sizes="100vw"
-          quality={90}
+          quality={92}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, oklch(0.21 0 0 / 0) 50%, oklch(0.21 0 0 / 0.3) 100%)',
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0.08) 0%, oklch(0.21 0 0 / 0) 40%, oklch(0.21 0 0 / 0.35) 100%)',
           }}
         />
       </section>
@@ -172,11 +172,12 @@ export default function QuienesSomosPage() {
                 style={{ color: 'oklch(0.45 0 0)' }}
               >
                 Lo que arrancó como herboristería de barrio se ha ido
-                ampliando con consulta de reflexología, iridología,
-                kinesiología, osteopatía, quiromasaje, asesoramiento
-                nutricional, estética avanzada con INDIBA y Hydrafacial, y
-                clases semanales de pilates, tai-chí, bowspring y mindfulness.
-                Todo coordinado, todo desde un mismo lugar.
+                ampliando con terapias manuales —reflexología podal, masaje
+                craneosacral, metamórfico, relajante y descontracturante—,
+                biomagnetismo, kinesiología, estética avanzada con
+                Radiofrecuencia INDIBA y Hydrafacial, y clases semanales de
+                Tai-Chi, Pilates y Mindfulness. Todo coordinado, todo desde
+                un mismo lugar.
               </p>
             </div>
           </div>
@@ -185,7 +186,7 @@ export default function QuienesSomosPage() {
 
       {/* ─── Banner: foto del espacio interior ───────────────────── */}
       <section
-        className="relative h-72 lg:h-[28rem] overflow-hidden"
+        className="relative h-[400px] lg:h-[540px] overflow-hidden"
         aria-hidden
       >
         <Image
@@ -391,11 +392,8 @@ export default function QuienesSomosPage() {
                 </Link>
                 <Link
                   href="/servicios"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm tracking-wide border transition-all duration-300 hover:bg-[oklch(0.979_0.004_90)] hover:text-[oklch(0.21_0_0)]"
-                  style={{
-                    borderColor: 'oklch(0.979 0.004 90)',
-                    color: 'oklch(0.979 0.004 90)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm tracking-wide border transition-all duration-300 text-[oklch(0.979_0.004_90)] hover:bg-[oklch(0.979_0.004_90)] hover:text-[oklch(0.21_0_0)]"
+                  style={{ borderColor: 'oklch(0.979 0.004 90)' }}
                 >
                   Ver servicios
                 </Link>
