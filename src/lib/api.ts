@@ -20,10 +20,11 @@ api.interceptors.request.use((config) => {
 // Normalise error shape so callers always get a string message
 api.interceptors.response.use(
   (res) => res,
-  (error: AxiosError<{ message?: string; errors?: Array<{ msg: string }> }>) => {
+  (error: AxiosError<{ message?: string; error?: string; errors?: Array<{ msg: string }> }>) => {
     const data = error.response?.data
     const message =
       data?.message ??
+      data?.error ??
       data?.errors?.[0]?.msg ??
       error.message ??
       'Error de conexión con el servidor'
@@ -140,11 +141,10 @@ export const productCategoriesApi = {
 export const bookingsApi = {
   create: (body: {
     serviceId: string
-    /** YYYY-MM-DD */
     date: string
-    /** HH:MM (24h) — coincide con el campo `time` del backend */
     time: string
     notes?: string
+    confirmationEmail?: string
   }) => api.post('/bookings', body),
   getMyBookings: (params?: { status?: string; page?: number; limit?: number }) =>
     api.get('/bookings/my', { params }),
@@ -192,7 +192,7 @@ export const classesApi = {
   getBySlug: (slug: string) => api.get(`/classes/slug/${slug}`),
   enroll: (
     classId: string,
-    body?: { enrollmentType?: EnrollmentType; scheduleId?: string }
+    body?: { enrollmentType?: EnrollmentType; scheduleId?: string; confirmationEmail?: string }
   ) => api.post(`/classes/${classId}/enroll`, body ?? {}),
   cancelEnrollment: (classId: string) =>
     api.patch(`/classes/${classId}/enroll/cancel`),
