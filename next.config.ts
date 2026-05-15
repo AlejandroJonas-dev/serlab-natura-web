@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
         // bajo el cloud "dpx2boqn1" — ver serlab-natura-api/src/services/cloudinary.service.ts
         protocol: 'https',
         hostname: 'res.cloudinary.com',
-        pathname: '/**',
+        pathname: '/dpx2boqn1/**',
       },
     ],
   },

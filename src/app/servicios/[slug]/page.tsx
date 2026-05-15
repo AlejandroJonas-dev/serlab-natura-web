@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock, Phone, X } from 'lucide-react'
 import { servicesApi, bookingsApi } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth.store'
 import type { Service } from '@/types'
 
 const DEFAULT_BENEFITS = [
@@ -226,6 +227,7 @@ export default function ServiceDetailPage() {
   const slug = params.slug as string
   const [showModal, setShowModal] = useState(false)
   const [bookSuccess, setBookSuccess] = useState(false)
+  const { isAuthenticated } = useAuthStore()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['service', slug],
@@ -383,6 +385,26 @@ export default function ServiceDetailPage() {
                   <p className="text-xs" style={{ color: 'oklch(0.656 0.016 78)' }}>
                     Revisa tu correo para la confirmación. Nos pondremos en contacto para confirmar el horario.
                   </p>
+                </div>
+              ) : !isAuthenticated ? (
+                <div className="space-y-2 mb-3">
+                  <p className="text-xs text-center mb-3" style={{ color: 'oklch(0.656 0.016 78)' }}>
+                    Necesitas una cuenta para reservar
+                  </p>
+                  <Link
+                    href="/auth/login"
+                    className="w-full flex items-center justify-center gap-2 py-4 text-sm font-medium tracking-wide transition-all duration-300"
+                    style={{ background: 'oklch(0.21 0 0)', color: 'oklch(0.979 0.004 90)' }}
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="w-full flex items-center justify-center gap-2 py-3 text-sm transition-colors duration-200"
+                    style={{ border: '1px solid oklch(0.21 0 0 / 0.3)', color: 'oklch(0.21 0 0)' }}
+                  >
+                    Crear cuenta
+                  </Link>
                 </div>
               ) : (
                 <button

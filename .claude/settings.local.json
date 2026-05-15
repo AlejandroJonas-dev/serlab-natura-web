@@ -16,12 +16,20 @@
       "Bash(xxd)",
       "Bash(echo \"BUILD=$?\")",
       "Bash(echo \"API_TSC=$?\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "PowerShell(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\insertar_glosario.ps1\")",
+      "PowerShell(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\diagnostico_estilos.ps1\")",
+      "PowerShell(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\insertar_glosario.ps1\")",
+      "PowerShell(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\crear_memoria.ps1\"; if \\($LASTEXITCODE -eq 0\\) { Write-Host \"=== Estructura creada, insertando glosario ===\" ; powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\insertar_glosario.ps1\" })",
+      "PowerShell(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\crear_memoria.ps1\" 2>&1)",
+      "PowerShell(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\insertar_glosario.ps1\" 2>&1)",
+      "PowerShell($fi = Get-Item \"C:\\\\Users\\\\alejo\\\\TFG-SERLAB_NATURA\\\\Memoria_TFG_Serlab_Natura.docx\"; Write-Host \"Size: $\\([math]::Round\\($fi.Length/1KB, 1\\)\\) KB  Modified: $\\($fi.LastWriteTime\\)\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src\\config",
       "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\src",
-      "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\prisma"
+      "c:\\Users\\alejo\\TFG-SERLAB_NATURA\\serlab-natura-api\\prisma",
+      "C:\\Users\\alejo\\TFG-SERLAB_NATURA"
     ]
   }
 }

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle2, Clock, Users, X } from 'lucide-react'
 import { classesApi } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth.store'
 import type { GroupClass, EnrollmentType } from '@/types'
 
 const DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -185,6 +186,7 @@ export default function ClaseDetailPage() {
   const [showModal, setShowModal] = useState(false)
   const [enrollSuccess, setEnrollSuccess] = useState(false)
   const queryClient = useQueryClient()
+  const { isAuthenticated } = useAuthStore()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['class', slug],
@@ -480,6 +482,26 @@ export default function ClaseDetailPage() {
                   <p className="text-xs" style={{ color: 'oklch(0.656 0.016 78)' }}>
                     Revisa tu correo para la confirmación.
                   </p>
+                </div>
+              ) : !isAuthenticated ? (
+                <div className="space-y-2">
+                  <p className="text-xs text-center mb-3" style={{ color: 'oklch(0.656 0.016 78)' }}>
+                    Necesitas una cuenta para inscribirte
+                  </p>
+                  <Link
+                    href="/auth/login"
+                    className="w-full flex items-center justify-center gap-2 py-4 text-sm font-medium tracking-wide transition-all duration-300"
+                    style={{ background: 'oklch(0.551 0.041 147)', color: 'oklch(0.979 0.004 90)' }}
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="w-full flex items-center justify-center gap-2 py-3 text-sm transition-colors duration-200"
+                    style={{ border: '1px solid oklch(0.551 0.041 147 / 0.4)', color: 'oklch(0.551 0.041 147)' }}
+                  >
+                    Crear cuenta
+                  </Link>
                 </div>
               ) : (
                 <button

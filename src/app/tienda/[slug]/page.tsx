@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { ArrowLeft, Minus, Plus } from 'lucide-react'
 import { productsApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
+import { useAuthStore } from '@/stores/auth.store'
 import type { Product } from '@/types'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo'
@@ -85,6 +86,7 @@ export default function ProductDetailPage() {
   const [activeImage, setActiveImage] = useState(0)
   const [added, setAdded] = useState(false)
   const addItem = useCartStore((s) => s.addItem)
+  const { isAuthenticated } = useAuthStore()
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['product', slug],
@@ -393,6 +395,27 @@ export default function ProductDetailPage() {
 
             {/* Cantidad + Añadir */}
             {!outOfStock ? (
+              !isAuthenticated ? (
+                <div className="space-y-2 mb-10">
+                  <p className="text-xs text-center mb-3" style={{ color: 'oklch(0.656 0.016 78)' }}>
+                    Necesitas una cuenta para comprar
+                  </p>
+                  <Link
+                    href="/auth/login"
+                    className="w-full flex items-center justify-center gap-2 py-4 text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
+                    style={{ background: 'oklch(0.21 0 0)', color: 'oklch(0.979 0.004 90)' }}
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="w-full flex items-center justify-center gap-2 py-3 text-sm transition-colors duration-200"
+                    style={{ border: '1px solid oklch(0.21 0 0 / 0.3)', color: 'oklch(0.21 0 0)' }}
+                  >
+                    Crear cuenta
+                  </Link>
+                </div>
+              ) : (
               <div className="flex items-stretch gap-3 mb-10">
                 <div
                   className="flex items-center"
@@ -445,6 +468,7 @@ export default function ProductDetailPage() {
                   )}
                 </button>
               </div>
+              )
             ) : (
               <div
                 className="py-4 px-5 mb-10"
