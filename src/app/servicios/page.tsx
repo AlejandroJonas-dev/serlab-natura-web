@@ -3,27 +3,70 @@
 import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
-import { ArrowRight, Clock, Leaf } from 'lucide-react'
+import { ArrowRight, Clock } from 'lucide-react'
 import { servicesApi, serviceCategoriesApi } from '@/lib/api'
 import type { Service, ServiceCategory } from '@/types'
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function MonogramPlaceholder({ name }: { name: string }) {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden select-none">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 10px,
+            oklch(0.21 0 0 / 0.025) 10px,
+            oklch(0.21 0 0 / 0.025) 11px
+          )`,
+        }}
+      />
+      <span
+        className="relative leading-none italic"
+        style={{
+          fontFamily: 'var(--font-playfair), serif',
+          fontSize: '7rem',
+          color: 'oklch(0.21 0 0 / 0.1)',
+          letterSpacing: '-0.02em',
+        }}
+      >
+        {name.charAt(0)}
+      </span>
+      <span
+        className="relative mt-4 text-[9px] tracking-[0.4em] uppercase"
+        style={{ color: 'oklch(0.668 0.063 64 / 0.6)' }}
+      >
+        Serlab Natura
+      </span>
+    </div>
+  )
+}
+
+function ServiceCard({
+  service,
+  index,
+  featured = false,
+}: {
+  service: Service
+  index: number
+  featured?: boolean
+}) {
   return (
     <Link
       href={`/servicios/${service.slug}`}
-      className={`reveal reveal-delay-${Math.min((index % 6) + 1, 6)} group relative flex flex-col`}
-      style={{ background: 'oklch(0.979 0.004 90)', border: '1px solid oklch(0.656 0.016 78 / 0.15)' }}
+      className={`reveal reveal-delay-${Math.min((index % 6) + 1, 6)} group relative flex flex-col overflow-hidden${featured ? ' sm:col-span-2' : ''}`}
+      style={{
+        background: 'oklch(0.979 0.004 90)',
+        border: '1px solid oklch(0.656 0.016 78 / 0.15)',
+      }}
     >
+      {/* Image */}
       <div
-        className="absolute top-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500"
-        style={{ background: 'oklch(0.668 0.063 64)' }}
-        aria-hidden
-      />
-      <div
-        className="aspect-[4/3] overflow-hidden relative"
+        className={`relative overflow-hidden${featured ? ' aspect-[16/9]' : ' aspect-[4/3]'}`}
         style={{
           background:
-            'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.18) 0%, oklch(0.668 0.063 64 / 0.12) 100%)',
+            'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.1) 0%, oklch(0.668 0.063 64 / 0.07) 100%)',
         }}
       >
         {service.images?.[0] ? (
@@ -34,87 +77,90 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          // Placeholder editorial: monograma con la inicial sobre un
-          // gradiente verde→cobre. Sustituye el icono genérico, mantiene
-          // el card legible cuando la empresa aún no ha subido la foto.
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span
-              className="block w-12 h-px mb-5"
-              style={{ background: 'oklch(0.668 0.063 64 / 0.7)' }}
-            />
-            <span
-              className="leading-none italic"
-              style={{
-                fontFamily: 'var(--font-playfair), serif',
-                fontSize: '6rem',
-                color: 'oklch(0.21 0 0 / 0.45)',
-              }}
-            >
-              {service.name.charAt(0)}
-            </span>
-            <span
-              className="mt-5 text-[10px] tracking-[0.35em] uppercase"
-              style={{ color: 'oklch(0.668 0.063 64)' }}
-            >
-              Serlab Natura
-            </span>
-          </div>
+          <MonogramPlaceholder name={service.name} />
         )}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{ background: 'oklch(0.21 0 0 / 0.12)' }}
+          aria-hidden
+        />
       </div>
+
+      {/* Bottom accent */}
+      <div
+        className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-500 ease-out"
+        style={{ background: 'oklch(0.668 0.063 64)' }}
+        aria-hidden
+      />
+
+      {/* Content */}
       <div className="p-6 flex flex-col flex-1">
         {service.category && (
           <span
-            className="text-xs tracking-[0.15em] uppercase mb-2"
+            className="text-[10px] tracking-[0.22em] uppercase mb-2"
             style={{ color: 'oklch(0.668 0.063 64)' }}
           >
             {service.category.name}
           </span>
         )}
         <h3
-          className="text-xl mb-3 leading-snug"
+          className={`leading-snug mb-2${featured ? ' text-2xl lg:text-3xl' : ' text-xl'}`}
           style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.21 0 0)' }}
         >
           {service.name}
         </h3>
-        <p className="text-sm leading-relaxed flex-1 mb-4 line-clamp-3" style={{ color: 'oklch(0.45 0 0)' }}>
+        <p
+          className="text-sm leading-relaxed flex-1 mb-5 line-clamp-2"
+          style={{ color: 'oklch(0.5 0 0)' }}
+        >
           {service.shortDescription ?? service.description ?? ''}
         </p>
-        <div className="flex items-center justify-between pt-4 border-t border-[oklch(0.656_0.016_78/0.12)]">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-2.5">
             <span
-              className="text-xl"
+              className="text-2xl leading-none"
               style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.668 0.063 64)' }}
             >
               {service.price.toFixed(0)}€
             </span>
             {service.duration && (
-              <span className="flex items-center gap-1 text-xs" style={{ color: 'oklch(0.656 0.016 78)' }}>
-                <Clock className="w-3 h-3" /> {service.duration} min
+              <span
+                className="flex items-center gap-1 text-xs"
+                style={{ color: 'oklch(0.656 0.016 78)' }}
+              >
+                <Clock className="w-3 h-3" />
+                {service.duration} min
               </span>
             )}
           </div>
-          <ArrowRight
-            className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
-            style={{ color: 'oklch(0.21 0 0)' }}
-          />
+          <span
+            className="flex items-center gap-1.5 text-xs tracking-[0.15em] uppercase transition-colors duration-200"
+            style={{ color: 'oklch(0.45 0 0)' }}
+          >
+            Reservar
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+          </span>
         </div>
       </div>
     </Link>
   )
 }
 
-function SkeletonCard() {
+function SkeletonCard({ featured = false }: { featured?: boolean }) {
   return (
     <div
-      className="animate-pulse"
+      className={`animate-pulse${featured ? ' sm:col-span-2' : ''}`}
       style={{ border: '1px solid oklch(0.656 0.016 78 / 0.1)' }}
     >
-      <div className="aspect-[4/3]" style={{ background: 'oklch(0.9 0.003 90)' }} />
+      <div
+        className={featured ? 'aspect-[16/9]' : 'aspect-[4/3]'}
+        style={{ background: 'oklch(0.92 0.003 90)' }}
+      />
       <div className="p-6 space-y-3">
-        <div className="h-3 w-20 rounded" style={{ background: 'oklch(0.9 0.003 90)' }} />
-        <div className="h-5 w-3/4 rounded" style={{ background: 'oklch(0.9 0.003 90)' }} />
-        <div className="h-3 w-full rounded" style={{ background: 'oklch(0.9 0.003 90)' }} />
-        <div className="h-3 w-2/3 rounded" style={{ background: 'oklch(0.9 0.003 90)' }} />
+        <div className="h-2.5 w-20 rounded-sm" style={{ background: 'oklch(0.92 0.003 90)' }} />
+        <div className="h-5 w-3/4 rounded-sm" style={{ background: 'oklch(0.92 0.003 90)' }} />
+        <div className="h-3 w-full rounded-sm" style={{ background: 'oklch(0.92 0.003 90)' }} />
+        <div className="h-3 w-2/3 rounded-sm" style={{ background: 'oklch(0.92 0.003 90)' }} />
       </div>
     </div>
   )
@@ -144,12 +190,12 @@ export default function ServiciosPage() {
       activeCategory
         ? allServices.filter((s) => (s.categoryId ?? s.category?.id) === activeCategory)
         : allServices,
-    [allServices, activeCategory]
+    [allServices, activeCategory],
   )
 
   return (
     <main>
-      {/* Page hero */}
+      {/* Hero */}
       <section
         className="py-20 lg:py-28 relative overflow-hidden"
         style={{ background: 'oklch(0.962 0.005 90)' }}
@@ -167,7 +213,8 @@ export default function ServiciosPage() {
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <nav
             aria-label="Breadcrumb"
-            className="flex items-center gap-2 text-xs text-[oklch(0.656_0.016_78)] mb-8"
+            className="flex items-center gap-2 text-xs mb-8"
+            style={{ color: 'oklch(0.656 0.016 78)' }}
           >
             <Link href="/" className="hover:text-[oklch(0.668_0.063_64)] transition-colors">
               Inicio
@@ -204,59 +251,70 @@ export default function ServiciosPage() {
       {/* Filters + Grid */}
       <section className="py-16 lg:py-24" style={{ background: 'oklch(0.979 0.004 90)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+          {/* Category tabs — underline style */}
           {categories.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-12 pb-10 border-b border-[oklch(0.656_0.016_78/0.12)]">
+            <div className="flex flex-wrap mb-12 pb-10 border-b border-[oklch(0.656_0.016_78/0.12)]">
               <button
                 onClick={() => setActiveCategory(null)}
-                className={`px-5 py-2 text-sm tracking-wide transition-all duration-200 ${
-                  activeCategory === null
-                    ? 'bg-[oklch(0.21_0_0)] text-[oklch(0.979_0.004_90)]'
-                    : 'border border-[oklch(0.656_0.016_78/0.3)] text-[oklch(0.45_0_0)] hover:border-[oklch(0.21_0_0)] hover:text-[oklch(0.21_0_0)]'
-                }`}
+                className="relative px-4 py-3 text-sm tracking-wide transition-colors duration-200 mr-1"
+                style={{ color: activeCategory === null ? 'oklch(0.21 0 0)' : 'oklch(0.55 0 0)' }}
               >
-                Todos los servicios
+                Todos
+                {activeCategory === null && (
+                  <span
+                    className="absolute bottom-0 left-0 right-0 h-px"
+                    style={{ background: 'oklch(0.668 0.063 64)' }}
+                  />
+                )}
               </button>
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-5 py-2 text-sm tracking-wide transition-all duration-200 ${
-                    activeCategory === cat.id
-                      ? 'bg-[oklch(0.21_0_0)] text-[oklch(0.979_0.004_90)]'
-                      : 'border border-[oklch(0.656_0.016_78/0.3)] text-[oklch(0.45_0_0)] hover:border-[oklch(0.21_0_0)] hover:text-[oklch(0.21_0_0)]'
-                  }`}
+                  className="relative px-4 py-3 text-sm tracking-wide transition-colors duration-200 mr-1"
+                  style={{ color: activeCategory === cat.id ? 'oklch(0.21 0 0)' : 'oklch(0.55 0 0)' }}
                 >
                   {cat.name}
+                  {activeCategory === cat.id && (
+                    <span
+                      className="absolute bottom-0 left-0 right-0 h-px"
+                      style={{ background: 'oklch(0.668 0.063 64)' }}
+                    />
+                  )}
                 </button>
               ))}
             </div>
           )}
 
+          {/* Grid */}
           {isLoading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard featured />
+              {Array.from({ length: 5 }).map((_, i) => (
                 <SkeletonCard key={i} />
               ))}
             </div>
           ) : services.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((s, i) => (
-                <ServiceCard key={s.id} service={s} index={i} />
+                <ServiceCard
+                  key={s.id}
+                  service={s}
+                  index={i}
+                  featured={i === 0 && services.length > 1}
+                />
               ))}
             </div>
           ) : (
             <div className="py-24 text-center">
-              <Leaf
-                className="w-10 h-10 mx-auto mb-4"
-                style={{ color: 'oklch(0.551 0.041 147 / 0.4)' }}
-              />
-              <p className="text-sm" style={{ color: 'oklch(0.45 0 0)' }}>
+              <p className="text-sm mb-3" style={{ color: 'oklch(0.45 0 0)' }}>
                 No hay servicios disponibles en esta categoría.
               </p>
               {activeCategory && (
                 <button
                   onClick={() => setActiveCategory(null)}
-                  className="text-sm mt-3 underline"
+                  className="text-sm underline underline-offset-4"
                   style={{ color: 'oklch(0.668 0.063 64)' }}
                 >
                   Ver todos los servicios
@@ -272,7 +330,10 @@ export default function ServiciosPage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <h2
             className="text-3xl lg:text-4xl mb-4"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.979 0.004 90)' }}
+            style={{
+              fontFamily: 'var(--font-playfair), serif',
+              color: 'oklch(0.979 0.004 90)',
+            }}
           >
             ¿No sabes qué terapia necesitas?
           </h2>
@@ -285,7 +346,7 @@ export default function ServiciosPage() {
           </p>
           <Link
             href="/contacto"
-            className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-300"
+            className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-300 hover:gap-3"
             style={{ background: 'oklch(0.979 0.004 90)', color: 'oklch(0.21 0 0)' }}
           >
             Consulta gratuita <ArrowRight className="w-4 h-4" />

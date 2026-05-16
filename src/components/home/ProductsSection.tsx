@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowRight, ShoppingBag, Package } from 'lucide-react'
+import { ArrowRight, ShoppingBag } from 'lucide-react'
 import { productsApi } from '@/lib/api'
 import { useCartStore } from '@/stores/cart.store'
 import type { Product } from '@/types'
@@ -30,7 +30,17 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Package className="w-12 h-12" style={{ color: 'oklch(0.656 0.016 78 / 0.4)' }} />
+            <span
+              aria-hidden
+              className="italic leading-none select-none"
+              style={{
+                fontFamily: 'var(--font-playfair), serif',
+                fontSize: '5rem',
+                color: 'oklch(0.21 0 0 / 0.08)',
+              }}
+            >
+              {product.name.charAt(0)}
+            </span>
           </div>
         )}
         {outOfStock && (
