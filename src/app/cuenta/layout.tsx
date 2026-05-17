@@ -16,6 +16,7 @@ const NAV = [
   { href: '/cuenta', label: 'Resumen', Icon: Sparkles, exact: true },
   { href: '/cuenta/pedidos', label: 'Mis pedidos', Icon: Package },
   { href: '/cuenta/reservas', label: 'Mis reservas', Icon: Calendar },
+  { href: '/cuenta/clases', label: 'Mis clases', Icon: Sparkles },
   { href: '/cuenta/perfil', label: 'Mi perfil', Icon: UserIcon },
 ]
 
