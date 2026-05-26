@@ -62,9 +62,9 @@ function ServiceCard({
         border: '1px solid oklch(0.656 0.016 78 / 0.15)',
       }}
     >
-      {/* Image */}
+      {/* Image — zoom limpio y único en hover, sin overlays ni filtros */}
       <div
-        className={`relative overflow-hidden editorial-img${featured ? ' aspect-[16/9]' : ' aspect-[4/3]'}`}
+        className={`relative overflow-hidden img-zoom editorial-img${featured ? ' aspect-[16/9]' : ' aspect-[4/3]'}`}
         style={{
           background:
             'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.1) 0%, oklch(0.668 0.063 64 / 0.07) 100%)',
@@ -75,21 +75,16 @@ function ServiceCard({
           <img
             src={service.images[0]}
             alt={service.name}
-            className="w-full h-full object-cover group-hover:scale-105"
+            className="w-full h-full object-cover"
           />
         ) : (
           <MonogramPlaceholder name={service.name} />
         )}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ background: 'oklch(0.668 0.063 64 / 0.08)' }}
-          aria-hidden
-        />
       </div>
 
-      {/* Bottom accent */}
+      {/* Underline cobre que aparece al pie de la tarjeta */}
       <div
-        className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-500 ease-out"
+        className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-[width] duration-700 ease-out"
         style={{ background: 'oklch(0.668 0.063 64)' }}
         aria-hidden
       />
