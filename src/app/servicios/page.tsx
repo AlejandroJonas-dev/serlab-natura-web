@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Clock } from 'lucide-react'
 import { servicesApi, serviceCategoriesApi } from '@/lib/api'
 import type { Service, ServiceCategory } from '@/types'
@@ -63,7 +64,7 @@ function ServiceCard({
     >
       {/* Image */}
       <div
-        className={`relative overflow-hidden${featured ? ' aspect-[16/9]' : ' aspect-[4/3]'}`}
+        className={`relative overflow-hidden editorial-img${featured ? ' aspect-[16/9]' : ' aspect-[4/3]'}`}
         style={{
           background:
             'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.1) 0%, oklch(0.668 0.063 64 / 0.07) 100%)',
@@ -74,14 +75,14 @@ function ServiceCard({
           <img
             src={service.images[0]}
             alt={service.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover group-hover:scale-105"
           />
         ) : (
           <MonogramPlaceholder name={service.name} />
         )}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ background: 'oklch(0.21 0 0 / 0.12)' }}
+          style={{ background: 'oklch(0.668 0.063 64 / 0.08)' }}
           aria-hidden
         />
       </div>
@@ -195,52 +196,77 @@ export default function ServiciosPage() {
 
   return (
     <main>
-      {/* Hero */}
+      {/* Hero con imagen de fondo */}
       <section
-        className="py-20 lg:py-28 relative overflow-hidden"
-        style={{ background: 'oklch(0.962 0.005 90)' }}
+        className="relative py-24 lg:py-36 overflow-hidden"
         aria-labelledby="servicios-h1"
       >
+        <Image
+          src="/images/serviciosyclases/masaje-craneosacral.jpeg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          style={{ objectPosition: 'center 30%' }}
+          sizes="100vw"
+          quality={90}
+        />
+        {/* Overlay oscuro para garantizar la legibilidad del texto */}
         <div
           aria-hidden
-          className="absolute right-0 top-0 w-1/2 h-full pointer-events-none"
+          className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(135deg, transparent 0%, oklch(0.551 0.041 147 / 0.05) 100%)',
-            clipPath: 'polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)',
+              'linear-gradient(180deg, oklch(0.21 0 0 / 0.62) 0%, oklch(0.21 0 0 / 0.55) 60%, oklch(0.21 0 0 / 0.7) 100%)',
           }}
         />
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <nav
             aria-label="Breadcrumb"
             className="flex items-center gap-2 text-xs mb-8"
-            style={{ color: 'oklch(0.656 0.016 78)' }}
+            style={{ color: 'oklch(0.979 0.004 90 / 0.65)' }}
           >
-            <Link href="/" className="hover:text-[oklch(0.668_0.063_64)] transition-colors">
+            <Link
+              href="/"
+              className="transition-colors hover:text-[oklch(0.979_0.004_90)]"
+            >
               Inicio
             </Link>
             <span>/</span>
-            <span>Servicios</span>
+            <span style={{ color: 'oklch(0.979 0.004 90)' }}>Servicios</span>
           </nav>
           <div className="flex items-center gap-3 mb-5">
-            <span className="rule-cobre" />
-            <span className="text-xs tracking-[0.25em] uppercase text-[oklch(0.668_0.063_64)]">
+            <span
+              className="block w-12 h-px"
+              style={{ background: 'oklch(0.85 0.05 80)' }}
+            />
+            <span
+              className="text-xs tracking-[0.25em] uppercase"
+              style={{ color: 'oklch(0.85 0.05 80)' }}
+            >
               Centro Serlab Natura
             </span>
           </div>
           <h1
             id="servicios-h1"
-            className="text-4xl lg:text-5xl mb-6 max-w-2xl"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.21 0 0)' }}
+            className="text-4xl lg:text-6xl mb-6 max-w-2xl leading-[1.1]"
+            style={{
+              fontFamily: 'var(--font-playfair), serif',
+              color: 'oklch(0.979 0.004 90)',
+            }}
           >
             Terapias y servicios
-            <em className="block not-italic italic" style={{ color: 'oklch(0.551 0.041 147)' }}>
+            <em
+              className="block not-italic italic"
+              style={{ color: 'oklch(0.85 0.05 80)' }}
+            >
               para tu bienestar integral.
             </em>
           </h1>
           <p
             className="text-base lg:text-lg max-w-xl leading-relaxed"
-            style={{ color: 'oklch(0.45 0 0)' }}
+            style={{ color: 'oklch(0.979 0.004 90 / 0.85)' }}
           >
             Cada tratamiento es personalizado, pensado para acompañarte en tu proceso de
             recuperación, bienestar y reconexión contigo mismo.

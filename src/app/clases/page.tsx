@@ -26,7 +26,7 @@ function ClassCard({ cls, index }: { cls: GroupClass; index: number }) {
       />
 
       <div
-        className="aspect-video relative overflow-hidden img-zoom"
+        className="aspect-video relative overflow-hidden img-zoom editorial-img"
         style={{
           background:
             'linear-gradient(135deg, oklch(0.551 0.041 147 / 0.18) 0%, oklch(0.668 0.063 64 / 0.12) 100%)',
@@ -134,57 +134,65 @@ export default function ClasesPage() {
 
   return (
     <main>
-      {/* Hero — verde background matching ClassesTeaser */}
+      {/* Hero con imagen de fondo */}
       <section
-        className="py-20 lg:py-28 relative overflow-hidden"
-        style={{ background: 'oklch(0.551 0.041 147)' }}
+        className="relative py-24 lg:py-36 overflow-hidden"
         aria-labelledby="clases-h1"
       >
+        <Image
+          src="/images/serviciosyclases/tai-chi.jpeg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          style={{ objectPosition: 'center 35%' }}
+          sizes="100vw"
+          quality={90}
+        />
+        {/* Overlay con tinte verde de marca para mantener identidad */}
         <div
           aria-hidden
-          className="absolute right-0 bottom-0 text-[20rem] leading-none select-none pointer-events-none"
+          className="absolute inset-0"
           style={{
-            fontFamily: 'var(--font-playfair), serif',
-            color: 'oklch(0.979 0.004 90 / 0.05)',
-            lineHeight: 0.9,
+            background:
+              'linear-gradient(180deg, oklch(0.32 0.04 147 / 0.78) 0%, oklch(0.32 0.04 147 / 0.65) 60%, oklch(0.21 0.02 147 / 0.78) 100%)',
           }}
-        >
-          C
-        </div>
+        />
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <nav
             aria-label="Breadcrumb"
             className="flex items-center gap-2 text-xs mb-8"
-            style={{ color: 'oklch(0.979 0.004 90 / 0.6)' }}
+            style={{ color: 'oklch(0.979 0.004 90 / 0.65)' }}
           >
             <Link href="/" className="hover:text-[oklch(0.979_0.004_90)] transition-colors">
               Inicio
             </Link>
             <span>/</span>
-            <span>Clases</span>
+            <span style={{ color: 'oklch(0.979 0.004 90)' }}>Clases</span>
           </nav>
           <div className="flex items-center gap-3 mb-5">
-            <span className="block w-12 h-px" style={{ background: 'oklch(0.668 0.063 64)' }} />
+            <span className="block w-12 h-px" style={{ background: 'oklch(0.85 0.05 80)' }} />
             <span
               className="text-xs tracking-[0.25em] uppercase"
-              style={{ color: 'oklch(0.668 0.063 64)' }}
+              style={{ color: 'oklch(0.85 0.05 80)' }}
             >
               Clases grupales
             </span>
           </div>
           <h1
             id="clases-h1"
-            className="text-4xl lg:text-5xl mb-6 max-w-2xl"
+            className="text-4xl lg:text-6xl mb-6 max-w-2xl leading-[1.1]"
             style={{ fontFamily: 'var(--font-playfair), serif', color: 'oklch(0.979 0.004 90)' }}
           >
             Tai-Chi, Pilates
-            <em className="block not-italic italic" style={{ color: 'oklch(0.668 0.063 64)' }}>
+            <em className="block not-italic italic" style={{ color: 'oklch(0.85 0.05 80)' }}>
               y Mindfulness.
             </em>
           </h1>
           <p
             className="text-base lg:text-lg max-w-xl leading-relaxed"
-            style={{ color: 'oklch(0.979 0.004 90 / 0.8)' }}
+            style={{ color: 'oklch(0.979 0.004 90 / 0.85)' }}
           >
             Clases semanales en grupos reducidos para moverse mejor, calmar la mente
             y reconectar con el cuerpo. Instructores certificados y espacio propio en el centro.
